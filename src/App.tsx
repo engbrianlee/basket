@@ -6,7 +6,10 @@ import createApolloClient from "./lib/apolloClient";
 import { Route, Switch } from "react-router";
 import Loading from "./components/Loading";
 
-const ProtectedRoute = ({ component, ...props }) => (
+type ProtectedRouteProps = {
+  component: React.ComponentType<object>;
+};
+const ProtectedRoute = ({ component, ...props }: ProtectedRouteProps) => (
   <Route
     component={withAuthenticationRequired(component, {
       // Show a message while the user waits to be redirected to the login page.

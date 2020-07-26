@@ -3,14 +3,15 @@ import {
   ApolloClient,
   InMemoryCache,
   split,
+  NormalizedCacheObject,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 
-let apolloClient = null;
+let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-const createApolloClient = (getAccessToken) => {
+const createApolloClient = (getAccessToken: () => Promise<string>) => {
   if (!apolloClient) {
     console.count("Creating Apollo Client");
     const httpLink = createHttpLink({

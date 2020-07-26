@@ -8,6 +8,11 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/jest": "^26.0.7",
+    "@types/node": "^14.0.26",
+    "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-router-dom": "^5.1.5",
     "apollo-cache-persist": "^0.1.1",
     "history": "^5.0.0",
     "react": "^16.13.1",
@@ -15,7 +20,8 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "subscriptions-transport-ws": "^0.9.17"
+    "subscriptions-transport-ws": "^0.9.17",
+    "typescript": "^3.9.7"
   },
   "scripts": {
     "start": "react-scripts start",
