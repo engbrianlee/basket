@@ -4,15 +4,39 @@ import classNames from "classnames";
 import {
   CreateShoppingListMutationVariables,
   useCreateShoppingListMutation,
+  GetCreatedShoppingListsQuery,
 } from "../../generated/graphql";
 import { gql } from "@apollo/client";
 import { GET_CREATED_SHOPPING_LISTS } from "./CreatedShoppingLists";
 import ShoppingList from "./ShoppingList";
+import produce from "immer";
+import { ApolloDataNotFoundError } from "../../lib/error";
 
 type FormData = CreateShoppingListMutationVariables;
 
 const CreateShoppingList = () => {
-  const [createShoppingList] = useCreateShoppingListMutation();
+  const [createShoppingList] = useCreateShoppingListMutation({
+    update: (cache, { data }) => {
+      const query = GET_CREATED_SHOPPING_LISTS;
+      const cachedData = cache.readQuery<GetCreatedShoppingListsQuery>({
+        query,
+      });
+      const newData = produce(cachedData, (t) => {
+        if (!data || !data.insert_shopping_lists_one) {
+          throw new ApolloDataNotFoundError();
+        }
+        t?.current_user[0].user?.created_shopping_lists.unshift(
+          data.insert_shopping_lists_one
+        );
+      });
+      if (newData) {
+        cache.writeQuery<GetCreatedShoppingListsQuery>({
+          query,
+          data: newData,
+        });
+      }
+    },
+  });
 
   const { register, handleSubmit, watch, errors, reset } = useForm<FormData>();
 

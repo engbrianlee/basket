@@ -11,7 +11,12 @@ import {
   UpdateShoppingListMutationVariables,
   useDeleteShoppingListMutation,
   useUpdateShoppingListMutation,
+  GetCreatedShoppingListsQuery,
 } from "../../generated/graphql";
+import { GET_CREATED_SHOPPING_LISTS } from "./CreatedShoppingLists";
+import produce from "immer";
+import { ApolloDataNotFoundError } from "../../lib/error";
+import _ from "lodash";
 
 type ShoppingListProps = {
   shoppingList: ShoppingListDataFragment;
@@ -21,7 +26,32 @@ const shoppingListDefaultProps = {
 };
 type FormData = Omit<UpdateShoppingListMutationVariables, "id">;
 const ShoppingList = ({ shoppingList, canDelete }: ShoppingListProps) => {
-  const [deleteShoppingList] = useDeleteShoppingListMutation();
+  const [deleteShoppingList] = useDeleteShoppingListMutation({
+    update: (cache, { data }) => {
+      const query = GET_CREATED_SHOPPING_LISTS;
+      const cachedData = cache.readQuery<GetCreatedShoppingListsQuery>({
+        query,
+      });
+      const newData = produce(cachedData, (t) => {
+        if (!data || !data.delete_shopping_lists_by_pk) {
+          throw new ApolloDataNotFoundError();
+        }
+        if (t?.current_user[0].user?.created_shopping_lists) {
+          _.remove(
+            t?.current_user[0].user?.created_shopping_lists,
+            (shopping_list) =>
+              shopping_list.id === data.delete_shopping_lists_by_pk?.id
+          );
+        }
+      });
+      if (newData) {
+        cache.writeQuery<GetCreatedShoppingListsQuery>({
+          query,
+          data: newData,
+        });
+      }
+    },
+  });
   const [updateShoppingList] = useUpdateShoppingListMutation();
 
   const { register, handleSubmit, watch, errors, reset } = useForm<FormData>({
