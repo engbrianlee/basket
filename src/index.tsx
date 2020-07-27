@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { Auth0ProviderOptions } from "@auth0/auth0-react/dist/auth0-provider";
 import auth0Config from "./lib/auth0Config";
+import "./tailwind/tailwind.output.css";
 
 type Auth0ProviderWithHistoryProps = { children: React.ReactNode };
 const Auth0ProviderWithHistory = ({

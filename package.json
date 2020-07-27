@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"yarn generate --watch\"",
+    "start": "concurrently \"yarn start:react\" \"yarn generate --watch\" \"yarn watch:tailwind\"",
+    "start:react": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "generate": "graphql-codegen -r dotenv/config",
-    "prestart": "yarn generate"
+    "build:tailwind": "tailwindcss build src/tailwind/tailwind.css -o src/tailwind/tailwind.output.css",
+    "watch:tailwind": "chokidar 'src/**/*.css' 'src/**/*.scss' --ignore src/tailwind/tailwind.output.css -c 'yarn build:tailwind' --initial true",
+    "prestart": "yarn generate",
+    "prebuild": "concurrently \"yarn generate\" \"yarn build:tailwind\""
   },
   "dependencies": {
     "@apollo/client": "^3.0.2",
@@ -55,8 +59,10 @@
     "@graphql-codegen/typescript": "^1.17.4",
     "@graphql-codegen/typescript-operations": "^1.17.4",
     "@graphql-codegen/typescript-react-apollo": "^1.17.4",
+    "chokidar-cli": "^2.1.0",
     "concurrently": "^5.2.0",
     "eslint-config-prettier": "^6.11.0",
-    "graphql": "^15.3.0"
+    "graphql": "^15.3.0",
+    "tailwindcss": "^1.5.2"
   }
 }

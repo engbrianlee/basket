@@ -25,3 +25,6 @@ yarn-error.log*
 
 src/generated
 graphql.schema.json
+
+# tailwind output
+src/tailwind/tailwind.output.css

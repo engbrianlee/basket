@@ -15,7 +15,7 @@ const RouteDashboard = () => {
   `);
   return (
     <Layout>
-      <div>Dashboard</div>
+      <div className="bg-red-500">Dashboard</div>
       {JSON.stringify(data)}
     </Layout>
   );
