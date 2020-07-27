@@ -1,7 +1,7 @@
 import React from "react";
 const { useLocation } = require("react-router");
 
-const Route404 = () => {
+const Page404 = () => {
   let location = useLocation();
 
   return (
@@ -13,4 +13,4 @@ const Route404 = () => {
   );
 };
 
-export default Route404;
+export default Page404;

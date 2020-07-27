@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { ApolloProvider } from "@apollo/client";
-import Routes from "./routes";
+import Pages from "./pages";
 import createApolloClient from "./lib/apolloClient";
-import { Route, Switch } from "react-router";
+import { Route, RouteProps, Switch } from "react-router";
 import Loading from "./components/Loading";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
+import Page404 from "./pages/Page404";
 
 type ProtectedRouteProps = {
   component: React.ComponentType<object>;
-};
+} & RouteProps;
 const ProtectedRoute = ({ component, ...props }: ProtectedRouteProps) => (
   <Route
     component={withAuthenticationRequired(component, {
@@ -61,7 +62,10 @@ const App = () => {
       >
         <Switch>
           {/* All routes should required authentication */}
-          <ProtectedRoute component={Routes} />
+          <ProtectedRoute component={Pages} path="/" />
+          <Route path="*">
+            <Page404 />
+          </Route>
         </Switch>
         {explode ? <Bomb /> : null}
       </ErrorBoundary>
