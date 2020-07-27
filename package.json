@@ -8,6 +8,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "watch::generate": "graphql-codegen -r dotenv/config --watch",
     "generate": "graphql-codegen -r dotenv/config",
     "build:tailwind": "tailwindcss build src/tailwind/tailwind.css -o src/tailwind/tailwind.output.css",
     "watch:tailwind": "chokidar 'src/**/*.css' 'src/**/*.scss' --ignore src/tailwind/tailwind.output.css -c 'yarn build:tailwind' --initial true",
@@ -35,6 +36,7 @@
     "lodash": "^4.17.19",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-error-boundary": "^2.3.1",
     "react-hook-form": "^6.1.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
@@ -43,6 +45,7 @@
     "typescript": "^3.9.7",
     "uuid": "^8.2.0"
   },
+  "license": "MIT",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -67,6 +70,8 @@
     "@graphql-codegen/typescript": "^1.17.4",
     "@graphql-codegen/typescript-operations": "^1.17.4",
     "@graphql-codegen/typescript-react-apollo": "^1.17.4",
+    "@tailwindcss/custom-forms": "^0.2.1",
+    "@tailwindcss/ui": "^0.4.0",
     "chokidar-cli": "^2.1.0",
     "concurrently": "^5.2.0",
     "eslint-config-prettier": "^6.11.0",

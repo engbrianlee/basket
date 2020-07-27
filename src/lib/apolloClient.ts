@@ -19,7 +19,9 @@ const createApolloClient = (getAccessToken: () => Promise<string>) => {
     });
     const authLink = setContext(async (_, { headers }) => {
       const accessToken = await getAccessToken();
-      console.count(`Apollo httpLink: Getting accessToken: ${accessToken}`);
+      console.count(
+        `Apollo httpLink: Getting accessToken, and sending request.`
+      );
       // return the headers to the context so httpLink can read them
       return {
         headers: {
