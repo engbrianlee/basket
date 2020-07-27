@@ -1,22 +1,26 @@
 schema:
-    - ${GRAPHQL_SCHEMA_URI}:
-          headers:
-              "x-hasura-admin-secret": ${HASURA_GRAPHQL_ADMIN_SECRET}
+  - ${GRAPHQL_SCHEMA_URI}:
+      headers:
+        "x-hasura-admin-secret": ${HASURA_GRAPHQL_ADMIN_SECRET}
 documents:
-    - "./src/**/*.tsx"
-    - "./src/**/*.ts"
-overwrite: true
+  - "./src/**/*.tsx"
+  - "./src/**/*.ts"
+  - query
+  - mutation
+  - subscription
+  - fragments
 generates:
-    "./src/generated/graphql.tsx":
-        plugins:
-            - "typescript"
-            - "typescript-operations"
-            - "typescript-react-apollo"
-        config:
-            skipTypename: false
-            withHooks: true
-            withHOC: false
-            withComponent: false
-    "./graphql.schema.json":
-        plugins:
-            - "introspection"
+  "./src/generated/graphql.tsx":
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      skipTypename: false
+      withHooks: true
+      withHOC: false
+      withComponent: false
+      reactApolloVersion: 3
+  "./graphql.schema.json":
+    plugins:
+      - "introspection"

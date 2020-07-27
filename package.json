@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "concurrently \"yarn start:react\" \"yarn generate --watch\" \"yarn watch:tailwind\"",
+    "start": "concurrently \"yarn start:react\" \"yarn watch:tailwind\"",
     "start:react": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -20,20 +20,28 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/classnames": "^2.2.10",
     "@types/jest": "^26.0.7",
+    "@types/lodash": "^4.14.158",
     "@types/node": "^14.0.26",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
+    "@types/uuid": "^8.0.0",
     "apollo-cache-persist": "^0.1.1",
+    "classnames": "^2.2.6",
+    "date-fns": "^2.15.0",
     "history": "^5.0.0",
+    "lodash": "^4.17.19",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-hook-form": "^6.1.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "subscriptions-transport-ws": "^0.9.17",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "uuid": "^8.2.0"
   },
   "eslintConfig": {
     "extends": [
