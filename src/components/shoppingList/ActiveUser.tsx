@@ -8,6 +8,7 @@ ActiveUser.fragments = {
     fragment ActiveUserData on shopping_list_active_users {
       user {
         name
+        public_id
       }
     }
   `,

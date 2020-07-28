@@ -44,7 +44,9 @@ CreatedShoppingLists.fragments = {
 const GET_CREATED_SHOPPING_LISTS = gql`
   query getCreatedShoppingLists {
     current_user {
+      id
       user {
+        public_id
         created_shopping_lists {
           ...CreatedShoppingListsData
         }

@@ -61,7 +61,11 @@ const createApolloClient = (getAccessToken: () => Promise<string>) => {
     );
     apolloClient = new ApolloClient({
       link: splitLink,
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        typePolicies: {
+          users: { keyFields: ["public_id"] },
+        },
+      }),
     });
   }
 

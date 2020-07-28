@@ -169,11 +169,12 @@ ShoppingList.defaultProps = shoppingListDefaultProps;
 ShoppingList.fragments = {
   shoppingList: gql`
     fragment ShoppingListData on shopping_lists {
+      id
       created_at
       description
-      id
       title
       creator {
+        public_id
         name
       }
       active_users {

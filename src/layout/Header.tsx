@@ -6,6 +6,7 @@ const Header = () => {
   return (
     <header>
       <button
+        className="text-blue-500"
         onClick={() =>
           logout({
             returnTo: window.location.origin,

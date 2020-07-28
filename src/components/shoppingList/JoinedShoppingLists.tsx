@@ -42,6 +42,7 @@ JoinedShoppingLists.fragments = {
         ...ShoppingListData
       }
     }
+    ${ShoppingList.fragments.shoppingList}
   `,
 };
 
@@ -49,6 +50,7 @@ const GET_JOINED_SHOPPING_LISTS = gql`
   query getJoinedShoppingLists {
     current_user {
       user {
+        public_id
         joined_shopping_lists {
           ...JoinedShoppingListsData
         }
