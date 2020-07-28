@@ -7,6 +7,7 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { WebSocketLink } from "@apollo/client/link/ws";
+import { RetryLink } from "@apollo/client/link/retry";
 import { getMainDefinition } from "@apollo/client/utilities";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
@@ -48,6 +49,8 @@ const createApolloClient = (getAccessToken: () => Promise<string>) => {
       },
     });
 
+    const retryLink = new RetryLink();
+
     const splitLink = split(
       ({ query }) => {
         const definition = getMainDefinition(query);
@@ -59,8 +62,9 @@ const createApolloClient = (getAccessToken: () => Promise<string>) => {
       wsLink,
       authLink.concat(httpLink)
     );
+
     apolloClient = new ApolloClient({
-      link: splitLink,
+      link: retryLink.concat(splitLink),
       cache: new InMemoryCache({
         typePolicies: {
           users: { keyFields: ["public_id"] },
