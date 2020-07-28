@@ -11,8 +11,10 @@ const JoinedShoppingLists = () => {
   if (loading) {
     return <Loading />;
   }
-  if (!data || !data.current_user) {
-    throw new ApolloDataNotFoundError();
+  const joined_shopping_lists =
+    data?.current_user[0].user?.joined_shopping_lists;
+  if (joined_shopping_lists) {
+    throw new ApolloDataNotFoundError({ joined_shopping_lists });
   }
 
   return (

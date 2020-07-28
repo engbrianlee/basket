@@ -1,7 +1,8 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
 
 class ApolloDataNotFoundError extends Error {
-  constructor(...params: any[]) {
+  data: object;
+  constructor(data: object, ...params: any[]) {
     // Pass remaining arguments (including vendor specific ones) to parent constructor
     super(...params);
 
@@ -11,6 +12,7 @@ class ApolloDataNotFoundError extends Error {
     }
 
     this.name = "ApolloDataNotFoundError";
+    this.data = data;
   }
 }
 

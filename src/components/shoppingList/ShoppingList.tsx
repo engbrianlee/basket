@@ -17,6 +17,7 @@ import { GET_CREATED_SHOPPING_LISTS } from "./CreatedShoppingLists";
 import produce from "immer";
 import { ApolloDataNotFoundError } from "../../lib/error";
 import _ from "lodash";
+import Creator from "./Creator";
 
 type ShoppingListProps = {
   shoppingList: ShoppingListDataFragment;
@@ -33,14 +34,15 @@ const ShoppingList = ({ shoppingList, canDelete }: ShoppingListProps) => {
         query,
       });
       const newData = produce(cachedData, (t) => {
-        if (!data || !data.delete_shopping_lists_by_pk) {
-          throw new ApolloDataNotFoundError();
+        const delete_shopping_lists_by_pk = data?.delete_shopping_lists_by_pk;
+        if (!delete_shopping_lists_by_pk) {
+          throw new ApolloDataNotFoundError({ delete_shopping_lists_by_pk });
         }
         if (t?.current_user[0].user?.created_shopping_lists) {
           _.remove(
             t?.current_user[0].user?.created_shopping_lists,
             (shopping_list) =>
-              shopping_list.id === data.delete_shopping_lists_by_pk?.id
+              shopping_list.id === delete_shopping_lists_by_pk.id
           );
         }
       });
@@ -77,7 +79,16 @@ const ShoppingList = ({ shoppingList, canDelete }: ShoppingListProps) => {
 
   const onSubmit: SubmitHandler<FormData> = ({ set_input }) => {
     setIsEditing(false);
-    updateShoppingList({ variables: { id: shoppingList.id, set_input } });
+    updateShoppingList({
+      variables: { id: shoppingList.id, set_input },
+      optimisticResponse: {
+        update_shopping_lists_by_pk: {
+          ...shoppingList,
+          title: set_input.title || "",
+          description: set_input.description,
+        },
+      },
+    });
   };
 
   return (
@@ -155,7 +166,12 @@ const ShoppingList = ({ shoppingList, canDelete }: ShoppingListProps) => {
       {canDelete && (
         <button
           onClick={() =>
-            deleteShoppingList({ variables: { id: shoppingList.id } })
+            deleteShoppingList({
+              variables: { id: shoppingList.id },
+              optimisticResponse: {
+                delete_shopping_lists_by_pk: { id: shoppingList.id },
+              },
+            })
           }
         >
           Delete
@@ -174,14 +190,14 @@ ShoppingList.fragments = {
       description
       title
       creator {
-        public_id
-        name
+        ...CreatorData
       }
       active_users {
         ...ActiveUserData
       }
     }
     ${ActiveUser.fragments.activeUser}
+    ${Creator.fragments.creator}
   `,
 };
 

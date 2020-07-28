@@ -5,6 +5,7 @@ import CreateShoppingList from "./CreateShoppingList";
 import Loading from "../Loading";
 import ShoppingList from "./ShoppingList";
 import { ApolloDataNotFoundError } from "../../lib/error";
+import Creator from "./Creator";
 
 const CreatedShoppingLists = () => {
   const { loading, data } = useGetCreatedShoppingListsQuery();
@@ -12,20 +13,20 @@ const CreatedShoppingLists = () => {
   if (loading) {
     return <Loading />;
   }
+  const created_shopping_lists =
+    data?.current_user[0].user?.created_shopping_lists;
 
-  if (!data || !data.current_user) {
-    throw new ApolloDataNotFoundError();
+  if (!created_shopping_lists) {
+    throw new ApolloDataNotFoundError({ created_shopping_lists });
   }
 
   return (
     <div>
       <h2>Created Shopping Lists</h2>
       <div className="divide-y-2 divide-gray-500">
-        {data.current_user[0].user?.created_shopping_lists.map(
-          (shoppingList) => (
-            <ShoppingList key={shoppingList.id} shoppingList={shoppingList} />
-          )
-        )}
+        {created_shopping_lists.map((shoppingList) => (
+          <ShoppingList key={shoppingList.id} shoppingList={shoppingList} />
+        ))}
       </div>
 
       <CreateShoppingList />
@@ -46,14 +47,15 @@ const GET_CREATED_SHOPPING_LISTS = gql`
     current_user {
       id
       user {
-        public_id
         created_shopping_lists {
           ...CreatedShoppingListsData
         }
+        ...CreatorData
       }
     }
   }
   ${CreatedShoppingLists.fragments.createdShoppingLists}
+  ${Creator.fragments.creator}
 `;
 
 export { GET_CREATED_SHOPPING_LISTS };

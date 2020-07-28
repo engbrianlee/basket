@@ -11,6 +11,8 @@ import { GET_CREATED_SHOPPING_LISTS } from "./CreatedShoppingLists";
 import ShoppingList from "./ShoppingList";
 import produce from "immer";
 import { ApolloDataNotFoundError } from "../../lib/error";
+import { formatISO } from "date-fns";
+import { v4 as uuidv4 } from "uuid";
 
 type FormData = CreateShoppingListMutationVariables;
 
@@ -22,12 +24,16 @@ const CreateShoppingList = () => {
         query,
       });
       const newData = produce(cachedData, (t) => {
-        if (!data || !data.insert_shopping_lists_one) {
-          throw new ApolloDataNotFoundError();
+        const created_shopping_lists =
+          t?.current_user[0].user?.created_shopping_lists;
+        if (!created_shopping_lists) {
+          throw new ApolloDataNotFoundError({ created_shopping_lists });
         }
-        t?.current_user[0].user?.created_shopping_lists.unshift(
-          data.insert_shopping_lists_one
-        );
+        const insert_shopping_lists_one = data?.insert_shopping_lists_one;
+        if (!insert_shopping_lists_one) {
+          throw new ApolloDataNotFoundError({ insert_shopping_lists_one });
+        }
+        created_shopping_lists.unshift(insert_shopping_lists_one);
       });
       if (newData) {
         cache.writeQuery<GetCreatedShoppingListsQuery>({
@@ -47,8 +53,21 @@ const CreateShoppingList = () => {
       <form
         className="mt-8"
         onSubmit={(e) => {
-          handleSubmit((data) => {
-            createShoppingList({ variables: data });
+          handleSubmit((variables) => {
+            createShoppingList({
+              variables,
+              optimisticResponse: {
+                insert_shopping_lists_one: {
+                  __typename: "shopping_lists",
+                  active_users: [],
+                  created_at: formatISO(new Date()),
+                  creator: { name: "Mock", public_id: "testId" },
+                  id: uuidv4(),
+                  title: variables.title,
+                  description: variables.description,
+                },
+              },
+            });
           })(e);
           reset();
         }}
@@ -124,6 +143,17 @@ const CREATE_SHOPPING_LIST = gql`
   ${ShoppingList.fragments.shoppingList}
 `;
 
-export { CREATE_SHOPPING_LIST };
+const GET_CREATOR = gql`
+  query getCreator {
+    current_user {
+      id
+      user {
+        ...CreatorData
+      }
+    }
+  }
+`;
+
+export { CREATE_SHOPPING_LIST, GET_CREATOR };
 
 export default CreateShoppingList;
