@@ -1,13 +1,25 @@
 import React from "react";
 import { gql } from "@apollo/client";
-import { useGetJoinedShoppingListsQuery } from "../../generated/graphql";
+import {
+  useGetJoinedShoppingListsQuery,
+  useUpdateShoppingListMutation,
+} from "../../generated/graphql";
 import Loading from "../Loading";
 import ShoppingList from "./ShoppingList";
 import { ApolloDataNotFoundError } from "../../lib/error";
 
+const fragment = gql`
+  fragment JoinedShoppingListsData on shopping_list_active_users {
+    shopping_list {
+      ...ShoppingListData
+    }
+  }
+  ${ShoppingList.fragment}
+`;
+
 const JoinedShoppingLists = () => {
   const { loading, data } = useGetJoinedShoppingListsQuery();
-
+  const [onUpdate] = useUpdateShoppingListMutation();
   if (loading) {
     return <Loading />;
   }
@@ -29,6 +41,7 @@ const JoinedShoppingLists = () => {
                 key={joined_shopping_lists.shopping_list.id}
                 shoppingList={joined_shopping_lists.shopping_list}
                 canDelete={false}
+                onUpdate={onUpdate}
               />
             )
           )}
@@ -37,17 +50,7 @@ const JoinedShoppingLists = () => {
     </div>
   );
 };
-JoinedShoppingLists.fragments = {
-  joinedShoppingLists: gql`
-    fragment JoinedShoppingListsData on shopping_list_active_users {
-      shopping_list {
-        ...ShoppingListData
-      }
-    }
-    ${ShoppingList.fragments.shoppingList}
-  `,
-};
-
+JoinedShoppingLists.fragment = fragment;
 const GET_JOINED_SHOPPING_LISTS = gql`
   query getJoinedShoppingLists {
     current_user {
@@ -59,7 +62,7 @@ const GET_JOINED_SHOPPING_LISTS = gql`
       }
     }
   }
-  ${JoinedShoppingLists.fragments.joinedShoppingLists}
+  ${JoinedShoppingLists.fragment}
 `;
 export { GET_JOINED_SHOPPING_LISTS };
 

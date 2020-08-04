@@ -60,11 +60,10 @@ const CreateShoppingList = () => {
                 insert_shopping_lists_one: {
                   __typename: "shopping_lists",
                   active_users: [],
-                  created_at: formatISO(new Date()),
+                  updated_at: formatISO(new Date()),
                   creator: { name: "Mock", public_id: "testId" },
                   id: uuidv4(),
                   title: variables.title,
-                  description: variables.description,
                 },
               },
             });
@@ -106,16 +105,6 @@ const CreateShoppingList = () => {
             )}
           </div>
           <div>
-            <input
-              aria-label="New List Description"
-              name="description"
-              type="text"
-              className="w-full rounded-none form-input"
-              placeholder="Description"
-              ref={register}
-            />
-          </div>
-          <div>
             <button
               type="submit"
               className={classNames(
@@ -133,14 +122,12 @@ const CreateShoppingList = () => {
 };
 
 const CREATE_SHOPPING_LIST = gql`
-  mutation createShoppingList($title: String!, $description: String) {
-    insert_shopping_lists_one(
-      object: { title: $title, description: $description }
-    ) {
+  mutation createShoppingList($title: String!) {
+    insert_shopping_lists_one(object: { title: $title }) {
       ...ShoppingListData
     }
   }
-  ${ShoppingList.fragments.shoppingList}
+  ${ShoppingList.fragment}
 `;
 
 const GET_CREATOR = gql`

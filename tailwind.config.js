@@ -7,7 +7,11 @@ module.exports = {
     "public/**/*.html",
   ],
   theme: {
-    extend: {},
+    extend: {
+      spacing: {
+        "18": "4.5rem",
+      },
+    },
   },
   variants: {},
   plugins: [require("@tailwindcss/ui"), require("@tailwindcss/custom-forms")],
