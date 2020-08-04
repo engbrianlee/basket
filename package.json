@@ -2,18 +2,23 @@
   "name": "basket-frontend",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "start": "concurrently \"yarn start:react\" \"yarn watch:tailwind\"",
     "start:react": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "watch::generate": "graphql-codegen -r dotenv/config --watch",
+    "watch:generate": "graphql-codegen -r dotenv/config --watch",
     "generate": "graphql-codegen -r dotenv/config",
     "build:tailwind": "tailwindcss build src/tailwind/tailwind.css -o src/tailwind/tailwind.output.css",
     "watch:tailwind": "chokidar 'src/**/*.css' 'src/**/*.scss' --ignore src/tailwind/tailwind.output.css -c 'yarn build:tailwind' --initial true",
     "prestart": "yarn generate",
-    "prebuild": "concurrently \"yarn generate\" \"yarn build:tailwind\""
+    "prebuild": "concurrently \"yarn generate\" \"yarn build:tailwind\"",
+    "start:storybook": "start-storybook -p 9009 -s public",
+    "storybook": "concurrently \"yarn start:storybook\" \"yarn watch:tailwind\"",
+    "prebuild-storybook": "yarn build:tailwind",
+    "build-storybook": "build-storybook -s public"
   },
   "dependencies": {
     "@apollo/client": "^3.0.2",
@@ -32,6 +37,7 @@
     "apollo-cache-persist": "^0.1.1",
     "classnames": "^2.2.6",
     "date-fns": "^2.15.0",
+    "framer-motion": "^2.3.0",
     "history": "^5.0.0",
     "immer": "^7.0.7",
     "lodash": "^4.17.19",
@@ -46,7 +52,27 @@
     "typescript": "^3.9.7",
     "uuid": "^8.3.0"
   },
-  "license": "MIT",
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.17.4",
+    "@graphql-codegen/introspection": "^1.17.4",
+    "@graphql-codegen/typescript": "^1.17.4",
+    "@graphql-codegen/typescript-operations": "^1.17.4",
+    "@graphql-codegen/typescript-react-apollo": "^1.17.4",
+    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-links": "^5.3.19",
+    "@storybook/addon-storyshots": "^5.3.19",
+    "@storybook/addons": "^5.3.19",
+    "@storybook/preset-create-react-app": "^3.1.4",
+    "@storybook/react": "^5.3.19",
+    "@tailwindcss/custom-forms": "^0.2.1",
+    "@tailwindcss/ui": "^0.4.0",
+    "chokidar-cli": "^2.1.0",
+    "concurrently": "^5.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "graphql": "^15.3.0",
+    "react-test-renderer": "^16.13.1",
+    "tailwindcss": "^1.5.2"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -64,19 +90,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@graphql-codegen/cli": "^1.17.4",
-    "@graphql-codegen/introspection": "^1.17.4",
-    "@graphql-codegen/typescript": "^1.17.4",
-    "@graphql-codegen/typescript-operations": "^1.17.4",
-    "@graphql-codegen/typescript-react-apollo": "^1.17.4",
-    "@tailwindcss/custom-forms": "^0.2.1",
-    "@tailwindcss/ui": "^0.4.0",
-    "chokidar-cli": "^2.1.0",
-    "concurrently": "^5.2.0",
-    "eslint-config-prettier": "^6.11.0",
-    "graphql": "^15.3.0",
-    "tailwindcss": "^1.5.2"
   }
 }
