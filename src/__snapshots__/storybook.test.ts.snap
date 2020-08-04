@@ -1,0 +1,235 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots ShoppingList Cant Delete 1`] = `
+<article
+  className="flex items-center justify-between w-full h-16 px-3 overflow-hidden bg-gray-300 rounded-lg"
+  onPanEnd={[Function]}
+>
+  <div>
+    <div
+      layout="position"
+    >
+      <h2
+        className="text-xl font-bold leading-none"
+      >
+        Pasta Run
+      </h2>
+      <span
+        animate={
+          Object {
+            "opacity": 1,
+          }
+        }
+        className="text-sm font-light leading-none text-gray-600"
+        initial={
+          Object {
+            "opacity": 0,
+          }
+        }
+      >
+        modified
+         
+        <time
+          dateTime="2020-07-31T17:21:08.064864+00:00"
+        >
+          4 days ago
+        </time>
+      </span>
+    </div>
+  </div>
+  <div
+    className="flex items-center h-full"
+  >
+    <div
+      animate={
+        Object {
+          "opacity": 1,
+          "x": 0,
+        }
+      }
+      className="flex items-center -space-x-2"
+      exit={
+        Object {
+          "opacity": 0,
+          "x": -30,
+        }
+      }
+      initial={false}
+      transition={
+        Object {
+          "duration": 0.1,
+          "type": "tween",
+        }
+      }
+    >
+      <div
+        className="bg-blue-500 text-lg text-white w-9 h-9 rounded-full flex items-center justify-center font-medium tracking-wide"
+      >
+        <span>
+          BL
+        </span>
+      </div>
+      <div
+        className="bg-green-500 text-lg text-white w-9 h-9 rounded-full flex items-center justify-center font-medium tracking-wide"
+      >
+        <span>
+          CC
+        </span>
+      </div>
+      <div
+        className="bg-red-500 text-lg text-white w-9 h-9 rounded-full flex items-center justify-center font-medium tracking-wide"
+      >
+        <span>
+          SC
+        </span>
+      </div>
+      <div
+        className="bg-purple-500 text-lg text-white w-9 h-9 rounded-full flex items-center justify-center font-medium tracking-wide"
+      >
+        <span>
+          JS
+        </span>
+      </div>
+    </div>
+    <div
+      layout={true}
+      transition={
+        Object {
+          "damping": 200,
+          "stiffness": 3000,
+          "type": "spring",
+        }
+      }
+    >
+      <svg
+        className="w-6 h-6 text-gray-400"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          clipRule="evenodd"
+          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+          fillRule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+</article>
+`;
+
+exports[`Storyshots ShoppingList Default 1`] = `
+<article
+  className="flex items-center justify-between w-full h-16 px-3 overflow-hidden bg-gray-300 rounded-lg"
+  onPanEnd={[Function]}
+>
+  <div>
+    <div
+      layout="position"
+    >
+      <h2
+        className="text-xl font-bold leading-none"
+      >
+        Pasta Run
+      </h2>
+      <span
+        animate={
+          Object {
+            "opacity": 1,
+          }
+        }
+        className="text-sm font-light leading-none text-gray-600"
+        initial={
+          Object {
+            "opacity": 0,
+          }
+        }
+      >
+        modified
+         
+        <time
+          dateTime="2020-07-31T17:21:08.064864+00:00"
+        >
+          4 days ago
+        </time>
+      </span>
+    </div>
+  </div>
+  <div
+    className="flex items-center h-full"
+  >
+    <div
+      animate={
+        Object {
+          "opacity": 1,
+          "x": 0,
+        }
+      }
+      className="flex items-center -space-x-2"
+      exit={
+        Object {
+          "opacity": 0,
+          "x": -30,
+        }
+      }
+      initial={false}
+      transition={
+        Object {
+          "duration": 0.1,
+          "type": "tween",
+        }
+      }
+    >
+      <div
+        className="bg-blue-500 text-lg text-white w-9 h-9 rounded-full flex items-center justify-center font-medium tracking-wide"
+      >
+        <span>
+          BL
+        </span>
+      </div>
+      <div
+        className="bg-green-500 text-lg text-white w-9 h-9 rounded-full flex items-center justify-center font-medium tracking-wide"
+      >
+        <span>
+          CC
+        </span>
+      </div>
+      <div
+        className="bg-red-500 text-lg text-white w-9 h-9 rounded-full flex items-center justify-center font-medium tracking-wide"
+      >
+        <span>
+          SC
+        </span>
+      </div>
+      <div
+        className="bg-purple-500 text-lg text-white w-9 h-9 rounded-full flex items-center justify-center font-medium tracking-wide"
+      >
+        <span>
+          JS
+        </span>
+      </div>
+    </div>
+    <div
+      layout={true}
+      transition={
+        Object {
+          "damping": 200,
+          "stiffness": 3000,
+          "type": "spring",
+        }
+      }
+    >
+      <svg
+        className="w-6 h-6 text-gray-400"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          clipRule="evenodd"
+          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+          fillRule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+</article>
+`;
