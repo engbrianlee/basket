@@ -17,6 +17,7 @@ import AvatarWithPlaceholderInitials, {
   CURRENT_USER_AVATAR_COLOR,
 } from "../Avatar";
 import { usePrevious } from "../../hooks/utils";
+import { Link } from "react-router-dom";
 
 const DEFAULT_NEW_LIST_TITLE = "";
 
@@ -139,48 +140,50 @@ const ShoppingList = ({
       onPanEnd={onPanEnd}
       className="flex items-center justify-between w-full h-16 px-3 overflow-hidden bg-gray-300 rounded-lg dark:text-gray-900"
     >
-      <div>
-        {isEditing ? (
-          <form
-            onBlur={(e) => {
-              e.preventDefault();
-              setIsEditing(false);
-            }}
-            onSubmit={(e) => {
-              e.preventDefault();
-              setIsEditing(false);
-            }}
-          >
-            <input
-              autoFocus
-              type="text"
-              className="w-full text-xl font-bold leading-none form-input"
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
-            />
-          </form>
-        ) : (
-          <motion.div layout="position">
-            <h2 className="text-xl font-bold leading-none">
-              {shoppingList.title}
-            </h2>
+      <Link to={`/shopping-list/${shoppingList.id}`}>
+        <div>
+          {isEditing ? (
+            <form
+              onBlur={(e) => {
+                e.preventDefault();
+                setIsEditing(false);
+              }}
+              onSubmit={(e) => {
+                e.preventDefault();
+                setIsEditing(false);
+              }}
+            >
+              <input
+                autoFocus
+                type="text"
+                className="w-full text-xl font-bold leading-none form-input"
+                value={editedTitle}
+                onChange={(e) => setEditedTitle(e.target.value)}
+              />
+            </form>
+          ) : (
+            <motion.div layout="position">
+              <h2 className="text-xl font-bold leading-none">
+                {shoppingList.title}
+              </h2>
 
-            {!showMenu && (
-              <motion.span
-                animate={{ opacity: 1 }}
-                className="text-sm font-light leading-none text-gray-600"
-              >
-                modified{" "}
-                <time dateTime={shoppingList.updated_at}>
-                  {formatDistanceToNow(new Date(shoppingList.updated_at), {
-                    addSuffix: true,
-                  })}
-                </time>
-              </motion.span>
-            )}
-          </motion.div>
-        )}
-      </div>
+              {!showMenu && (
+                <motion.span
+                  animate={{ opacity: 1 }}
+                  className="text-sm font-light leading-none text-gray-600"
+                >
+                  modified{" "}
+                  <time dateTime={shoppingList.updated_at}>
+                    {formatDistanceToNow(new Date(shoppingList.updated_at), {
+                      addSuffix: true,
+                    })}
+                  </time>
+                </motion.span>
+              )}
+            </motion.div>
+          )}
+        </div>
+      </Link>
       <div className="flex items-center h-full">
         <AnimatePresence initial={false}>
           {showMenu ? (
@@ -244,7 +247,9 @@ const ShoppingList = ({
                       onDelete({
                         variables: { id: shoppingList.id },
                         optimisticResponse: {
-                          delete_shopping_lists_by_pk: { id: shoppingList.id },
+                          delete_shopping_lists_by_pk: {
+                            id: shoppingList.id,
+                          },
                         },
                       })
                     }

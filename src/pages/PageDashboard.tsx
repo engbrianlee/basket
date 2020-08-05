@@ -1,9 +1,9 @@
 import React from "react";
 import CreatedShoppingLists, {
   GET_CREATED_SHOPPING_LISTS,
-} from "../components/shoppingList/CreatedShoppingLists";
+} from "../components/dashboard/OwnedShoppingLists";
 import { Redirect, Switch, Route, useRouteMatch } from "react-router";
-import JoinedShoppingLists from "../components/shoppingList/JoinedShoppingLists";
+import JoinedShoppingLists from "../components/dashboard/SharedShoppingLists";
 import Layout from "../layout/Layout";
 import { Link, LinkProps } from "react-router-dom";
 import {
@@ -14,7 +14,7 @@ import {
 import classNames from "classnames";
 import ShoppingList, {
   DEFAULT_NEW_LIST_TITLE,
-} from "../components/shoppingList/ShoppingList";
+} from "../components/dashboard/ShoppingList";
 import { gql } from "@apollo/client";
 import { ApolloDataNotFoundError } from "../lib/error";
 import produce from "immer";
@@ -22,7 +22,7 @@ import { formatISO } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 import ShoppingListsHeader, {
   ShoppingListsHeaderProps,
-} from "../components/shoppingList/ShoppingListsHeader";
+} from "../components/dashboard/ShoppingListsHeader";
 import { useAuth0 } from "@auth0/auth0-react";
 import useGlobalContext from "../components/context";
 import Loading from "../components/Loading";
@@ -68,9 +68,9 @@ const TabLink = ({
   );
 };
 TabLink.defaultProps = TabLinkDefaultProps;
-const PageShoppingLists = () => {
+const PageDashboard = () => {
   let { path, url } = useRouteMatch();
-  const isCreatedRoute = useRouteMatch({ path: `${url}/created` });
+  const isOwnedRoute = useRouteMatch({ path: `${url}/owned` });
   // Created Shopping Lists is default route, we don't need to prefetch
   // Pre fetch joined shopping lists
   const [getJoinedShoppingLists] = useGetJoinedShoppingListsLazyQuery();
@@ -130,7 +130,7 @@ const PageShoppingLists = () => {
             className="w-1/2 text-center border border-blue-500 rounded-md rounded-r-none"
             activeClassName="text-white bg-blue-500"
             inActiveClassName="bg-white text-blue-500"
-            to={`${url}/created`}
+            to={`${url}/owned`}
           >
             Owned
           </TabLink>
@@ -138,7 +138,7 @@ const PageShoppingLists = () => {
             className="w-1/2 text-center border border-blue-500 rounded-md rounded-l-none"
             activeClassName="text-white bg-blue-500"
             inActiveClassName="bg-white text-blue-500"
-            to={`${url}/joined`}
+            to={`${url}/shared`}
             onMouseOver={() => getJoinedShoppingLists()}
           >
             Shared
@@ -152,17 +152,17 @@ const PageShoppingLists = () => {
           >
             <Switch>
               <Route path={path} exact>
-                <Redirect to={`${url}/created`} />
+                <Redirect to={`${url}/owned`} />
               </Route>
-              <Route path={`${path}/created`} exact>
+              <Route path={`${path}/owned`} exact>
                 <CreatedShoppingLists />
               </Route>
-              <Route path={`${path}/joined`} exact>
+              <Route path={`${path}/shared`} exact>
                 <JoinedShoppingLists />
               </Route>
             </Switch>
           </div>
-          {isCreatedRoute && (
+          {isOwnedRoute && (
             <button
               onClick={() => {
                 const now = formatISO(new Date());
@@ -211,4 +211,4 @@ const CREATE_SHOPPING_LIST = gql`
 `;
 
 export { CREATE_SHOPPING_LIST };
-export default PageShoppingLists;
+export default PageDashboard;
