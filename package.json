@@ -11,9 +11,9 @@
     "eject": "react-scripts eject",
     "watch:generate": "graphql-codegen -r dotenv/config --watch",
     "generate": "graphql-codegen -r dotenv/config",
-    "build:tailwind": "tailwindcss build src/tailwind/tailwind.css -o src/tailwind/tailwind.output.css",
-    "watch:tailwind": "chokidar 'src/**/*.css' 'src/**/*.scss' --ignore src/tailwind/tailwind.output.css -c 'yarn build:tailwind' --initial true",
-    "prestart": "yarn generate",
+    "build:tailwind": "tailwindcss build -o src/tailwind/tailwind.output.css",
+    "watch:tailwind": "chokidar 'tailwind.config.js' 'src/**/*.css' 'src/**/*.scss' --ignore src/tailwind/tailwind.output.css -c 'yarn build:tailwind' --initial true",
+    "prestart": "concurrently \"yarn generate\" \"yarn build:tailwind\"",
     "prebuild": "concurrently \"yarn generate\" \"yarn build:tailwind\"",
     "start:storybook": "start-storybook -p 9009 -s public",
     "storybook": "concurrently \"yarn start:storybook\" \"yarn watch:tailwind\"",
@@ -73,7 +73,7 @@
     "eslint-config-prettier": "^6.11.0",
     "graphql": "^15.3.0",
     "react-test-renderer": "^16.13.1",
-    "tailwindcss": "^1.5.2"
+    "tailwindcss": "^1.6.2"
   },
   "eslintConfig": {
     "extends": [
