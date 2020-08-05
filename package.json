@@ -44,10 +44,12 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-error-boundary": "^2.3.1",
-    "react-hook-form": "^6.1.0",
+    "react-overlays": "^4.1.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "react-tippy": "^1.4.0",
+    "react-tooltip": "^4.2.7",
     "subscriptions-transport-ws": "^0.9.17",
     "typescript": "^3.9.7",
     "uuid": "^8.3.0"

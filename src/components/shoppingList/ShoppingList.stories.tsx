@@ -1,5 +1,5 @@
 import React from "react";
-import ShoppingList from "./ShoppingList";
+import ShoppingList, { DEFAULT_NEW_LIST_TITLE } from "./ShoppingList";
 import { ShoppingListDataFragment } from "../../generated/graphql";
 import { action } from "@storybook/addon-actions";
 
@@ -13,6 +13,7 @@ export default {
 export const taskData: ShoppingListDataFragment = {
   __typename: "shopping_lists",
   id: "b37f5d77-40ee-45c2-a790-2fa1d72784bb",
+  created_at: "2020-07-31T17:21:03.064864+00:00",
   updated_at: "2020-07-31T17:21:08.064864+00:00",
   title: "Pasta Run",
   creator: {
@@ -66,3 +67,18 @@ export const Default = () => (
 export const CantDelete = () => (
   <ShoppingList shoppingList={taskData} canDelete={false} {...actionsData} />
 );
+
+export const NewlyCreated = () => {
+  const now = new Date().toISOString();
+  return (
+    <ShoppingList
+      shoppingList={{
+        ...taskData,
+        title: DEFAULT_NEW_LIST_TITLE,
+        created_at: now,
+        updated_at: now,
+      }}
+      {...actionsData}
+    />
+  );
+};

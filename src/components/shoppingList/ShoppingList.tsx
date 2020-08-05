@@ -1,23 +1,24 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
   ShoppingListDataFragment,
-  UpdateShoppingListMutationVariables,
   DeleteShoppingListMutationFn,
   UpdateShoppingListMutationFn,
 } from "../../generated/graphql";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, differenceInSeconds } from "date-fns";
 import classNames from "classnames";
 import { motion, PanHandlers, PanInfo, AnimatePresence } from "framer-motion";
 import { gql } from "@apollo/client";
 import Creator from "./Creator";
 import ActiveUser from "./ActiveUser";
-import { useForm, SubmitHandler } from "react-hook-form";
 import { HandlerFunction } from "@storybook/addon-actions";
 import AvatarWithPlaceholderInitials, {
   parseInitials,
   AVATAR_COLORS,
+  CURRENT_USER_AVATAR_COLOR,
 } from "../Avatar";
 import { usePrevious } from "../../hooks/utils";
+
+const DEFAULT_NEW_LIST_TITLE = "";
 
 type ShoppingListProps = {
   shoppingList: ShoppingListDataFragment;
@@ -32,6 +33,7 @@ const fragment = gql`
   fragment ShoppingListData on shopping_lists {
     id
     updated_at
+    created_at
     title
     creator {
       ...CreatorData
@@ -44,7 +46,12 @@ const fragment = gql`
   ${Creator.fragment}
 `;
 
-type FormData = Omit<UpdateShoppingListMutationVariables, "id">;
+// Kindy hacky, but works for now. We want to be able to determine if a shopping
+// list has just been created so we can start in editing mode.
+const newList = (shoppingList: ShoppingListProps["shoppingList"]) =>
+  differenceInSeconds(new Date(), new Date(shoppingList.created_at)) < 2 &&
+  shoppingList.created_at === shoppingList.updated_at &&
+  shoppingList.title === DEFAULT_NEW_LIST_TITLE;
 
 const ShoppingList = ({
   shoppingList,
@@ -52,32 +59,38 @@ const ShoppingList = ({
   onDelete,
   onUpdate,
 }: ShoppingListProps) => {
-  const [showMenu, setShowMenu] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const startInEditing = newList(shoppingList);
+  const [showMenu, setShowMenu] = useState(startInEditing);
+  const [isEditing, setIsEditing] = useState(startInEditing);
+  const [editedTitle, setEditedTitle] = useState(
+    startInEditing ? "" : shoppingList.title
+  );
   const prevIsEditing = usePrevious(isEditing);
-  const { register, handleSubmit, watch, reset } = useForm<FormData>({
-    defaultValues: {
-      set_input: {
-        title: shoppingList.title,
-      },
-    },
-  });
-  const onSubmit: SubmitHandler<FormData> = useCallback(
-    ({ set_input }) => {
-      if (set_input.title && set_input.title !== shoppingList.title)
+  const onSubmit = useCallback(
+    (title: typeof editedTitle) => {
+      if (onDelete && startInEditing && !title) {
+        onDelete({
+          variables: { id: shoppingList.id },
+          optimisticResponse: {
+            delete_shopping_lists_by_pk: { id: shoppingList.id },
+          },
+        });
+      } else if (title && title !== shoppingList.title)
         onUpdate({
-          variables: { id: shoppingList.id, set_input },
+          variables: {
+            id: shoppingList.id,
+            set_input: { title: title },
+          },
           optimisticResponse: {
             update_shopping_lists_by_pk: {
               ...shoppingList,
-              title: set_input.title,
+              title: title,
             },
           },
         });
     },
-    [onUpdate, shoppingList]
+    [editedTitle, onDelete, startInEditing, shoppingList, onUpdate]
   );
-  const title = watch("set_input.title");
 
   const onPanEnd: PanHandlers["onPanEnd"] = (_event, info) => {
     /**
@@ -110,28 +123,21 @@ const ShoppingList = ({
     }
   };
 
-  // Reset form input when we get new props
-  useEffect(() => {
-    reset({
-      set_input: {
-        title: shoppingList.title,
-      },
-    });
-  }, [reset, shoppingList]);
-
   useEffect(() => {
     if (prevIsEditing && !isEditing) {
-      handleSubmit(onSubmit)();
+      console.log(newList);
+
+      onSubmit(editedTitle);
       if (showMenu) {
         setShowMenu(false);
       }
     }
-  }, [isEditing, handleSubmit, onSubmit, showMenu, prevIsEditing]);
+  }, [isEditing, onSubmit, showMenu, prevIsEditing, editedTitle]);
 
   return (
     <motion.article
       onPanEnd={onPanEnd}
-      className="flex items-center justify-between w-full h-16 px-3 overflow-hidden bg-gray-300 rounded-lg"
+      className="flex items-center justify-between w-full h-16 px-3 overflow-hidden bg-gray-300 rounded-lg dark:text-gray-900"
     >
       <div>
         {isEditing ? (
@@ -147,35 +153,39 @@ const ShoppingList = ({
           >
             <input
               autoFocus
-              name="set_input.title"
               type="text"
               className="w-full text-xl font-bold leading-none form-input"
-              ref={register({
-                required: true,
-              })}
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
             />
           </form>
         ) : (
-          <>
+          <motion.div layout="position">
             <h2 className="text-xl font-bold leading-none">
               {shoppingList.title}
             </h2>
-            <span className="text-sm font-light text-gray-600">
-              modified{" "}
-              <time dateTime={shoppingList.updated_at}>
-                {formatDistanceToNow(new Date(shoppingList.updated_at), {
-                  addSuffix: true,
-                })}
-              </time>
-            </span>
-          </>
+
+            {!showMenu && (
+              <motion.span
+                animate={{ opacity: 1 }}
+                className="text-sm font-light leading-none text-gray-600"
+              >
+                modified{" "}
+                <time dateTime={shoppingList.updated_at}>
+                  {formatDistanceToNow(new Date(shoppingList.updated_at), {
+                    addSuffix: true,
+                  })}
+                </time>
+              </motion.span>
+            )}
+          </motion.div>
         )}
       </div>
       <div className="flex items-center h-full">
-        <AnimatePresence exitBeforeEnter>
+        <AnimatePresence initial={false}>
           {showMenu ? (
             <>
-              <motion.div
+              <motion.button
                 transition={{
                   type: "spring",
                   stiffness: 3000,
@@ -183,6 +193,7 @@ const ShoppingList = ({
                 }}
                 key="chevron"
                 layout
+                onClick={() => setShowMenu((showMenu) => !showMenu)}
               >
                 <svg
                   fill="currentColor"
@@ -195,11 +206,11 @@ const ShoppingList = ({
                     clipRule="evenodd"
                   ></path>
                 </svg>
-              </motion.div>
+              </motion.button>
               <motion.div
+                key="menu"
                 initial={{ x: "100%", opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                exit={{ x: "100%", opacity: 0 }}
                 transition={{
                   x: { type: "spring", stiffness: 3000, damping: 200 },
                 }}
@@ -212,7 +223,7 @@ const ShoppingList = ({
                   >
                     <div
                       className={classNames(
-                        { "opacity-50 cursor-not-allowed": !title },
+                        { "opacity-50 cursor-not-allowed": !editedTitle },
                         "flex items-center justify-center h-full px-2 font-semibold text-white bg-gray-600 w-18"
                       )}
                     >
@@ -248,10 +259,14 @@ const ShoppingList = ({
           ) : (
             <>
               <motion.div
-                initial={{ opacity: 0, x: -30 }}
+                key="avatars"
+                initial={{ opacity: 0, x: "-100%" }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                transition={{ type: "tween", duration: 0.1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 3000,
+                  damping: 200,
+                }}
                 className="flex items-center -space-x-2"
               >
                 {shoppingList.active_users.map((activeUser, i) => (
@@ -259,14 +274,16 @@ const ShoppingList = ({
                     key={activeUser.user.public_id}
                     initials={parseInitials(activeUser.user.name)}
                     className={classNames(
-                      AVATAR_COLORS[i % AVATAR_COLORS.length],
-                      "text-lg text-white w-9 h-9"
+                      activeUser.user.public_id ===
+                        shoppingList.creator.public_id
+                        ? CURRENT_USER_AVATAR_COLOR
+                        : AVATAR_COLORS[i % AVATAR_COLORS.length],
+                      "text-lg text-white w-9 h-9 shadow-solid"
                     )}
                   />
                 ))}
               </motion.div>
-
-              <motion.div
+              <motion.button
                 layout
                 transition={{
                   type: "spring",
@@ -274,6 +291,7 @@ const ShoppingList = ({
                   damping: 200,
                 }}
                 key="chevron"
+                onClick={() => setShowMenu((showMenu) => !showMenu)}
               >
                 <svg
                   fill="currentColor"
@@ -286,7 +304,7 @@ const ShoppingList = ({
                     clipRule="evenodd"
                   ></path>
                 </svg>
-              </motion.div>
+              </motion.button>
             </>
           )}
         </AnimatePresence>
@@ -297,4 +315,5 @@ const ShoppingList = ({
 ShoppingList.defaultProps = shoppingListDefaultProps;
 ShoppingList.fragment = fragment;
 
+export { DEFAULT_NEW_LIST_TITLE };
 export default ShoppingList;

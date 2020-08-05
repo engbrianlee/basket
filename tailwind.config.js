@@ -11,6 +11,9 @@ module.exports = {
       spacing: {
         "18": "4.5rem",
       },
+      screens: {
+        dark: { raw: "(prefers-color-scheme: dark)" },
+      },
     },
   },
   variants: {},

@@ -14,5 +14,8 @@ export const motion = {
   article: ({ children, ...rest }: { children: JSX.Element }) => (
     <article {...rest}>{children}</article>
   ),
+  button: ({ children, ...rest }: { children: JSX.Element }) => (
+    <button {...rest}>{children}</button>
+  ),
   img: (props: any) => <img {...props} />,
 };

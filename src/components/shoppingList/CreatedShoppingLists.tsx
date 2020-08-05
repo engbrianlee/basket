@@ -6,7 +6,6 @@ import {
   GetCreatedShoppingListsQuery,
   useUpdateShoppingListMutation,
 } from "../../generated/graphql";
-import CreateShoppingList from "./CreateShoppingList";
 import Loading from "../Loading";
 import ShoppingList from "./ShoppingList";
 import { ApolloDataNotFoundError } from "../../lib/error";
@@ -62,20 +61,15 @@ const CreatedShoppingLists = () => {
   }
 
   return (
-    <div>
-      <h2>Created Shopping Lists</h2>
-      <div className="space-y-2">
-        {created_shopping_lists.map((shoppingList) => (
-          <ShoppingList
-            key={shoppingList.id}
-            shoppingList={shoppingList}
-            onDelete={onDelete}
-            onUpdate={onUpdate}
-          />
-        ))}
-      </div>
-
-      <CreateShoppingList />
+    <div className="w-full space-y-2">
+      {created_shopping_lists.map((shoppingList) => (
+        <ShoppingList
+          key={shoppingList.id}
+          shoppingList={shoppingList}
+          onDelete={onDelete}
+          onUpdate={onUpdate}
+        />
+      ))}
     </div>
   );
 };

@@ -25,28 +25,19 @@ const JoinedShoppingLists = () => {
   }
   const joined_shopping_lists =
     data?.current_user[0].user?.joined_shopping_lists;
-  if (joined_shopping_lists) {
+  if (!joined_shopping_lists) {
     throw new ApolloDataNotFoundError({ joined_shopping_lists });
   }
 
   return (
-    <div>
-      <h2>Joined Shopping Lists</h2>
-      <p>{JSON.stringify(data)}</p>
-      {!(loading || !data) && (
-        <div className="divide-y-2 divide-gray-500">
-          {data.current_user[0].user?.joined_shopping_lists.map(
-            (joined_shopping_lists) => (
-              <ShoppingList
-                key={joined_shopping_lists.shopping_list.id}
-                shoppingList={joined_shopping_lists.shopping_list}
-                canDelete={false}
-                onUpdate={onUpdate}
-              />
-            )
-          )}
-        </div>
-      )}
+    <div className="w-full space-y-2">
+      {joined_shopping_lists.map(({ shopping_list: shoppingList }) => (
+        <ShoppingList
+          key={shoppingList.id}
+          shoppingList={shoppingList}
+          onUpdate={onUpdate}
+        />
+      ))}
     </div>
   );
 };

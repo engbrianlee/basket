@@ -18,13 +18,15 @@ const AvatarWithPlaceholderInitials = ({
     <span>{initials}</span>
   </div>
 );
+const parseFirstName = (name: string) => name.split(" ")[0];
 const parseInitials = (name: string) =>
   name
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase())
     .join("");
+
+const CURRENT_USER_AVATAR_COLOR = "bg-blue-500";
 const AVATAR_COLORS = [
-  "bg-blue-500",
   "bg-green-500",
   "bg-red-500",
   "bg-purple-500",
@@ -36,4 +38,9 @@ const AVATAR_COLORS = [
 ];
 
 export default AvatarWithPlaceholderInitials;
-export { parseInitials, AVATAR_COLORS };
+export {
+  parseInitials,
+  AVATAR_COLORS,
+  CURRENT_USER_AVATAR_COLOR,
+  parseFirstName,
+};

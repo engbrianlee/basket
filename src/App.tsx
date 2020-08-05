@@ -7,6 +7,7 @@ import { Route, RouteProps, Switch } from "react-router";
 import Loading from "./components/Loading";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import Page404 from "./pages/Page404";
+import { GlobalContextProvider } from "./components/context";
 
 type ProtectedRouteProps = {
   component: React.ComponentType<object>;
@@ -60,14 +61,16 @@ const App = () => {
         onReset={() => setExplode(false)}
         resetKeys={[explode]}
       >
-        <Switch>
-          {/* All routes should required authentication */}
-          <ProtectedRoute component={Pages} path="/" />
-          <Route path="*">
-            <Page404 />
-          </Route>
-        </Switch>
-        {explode ? <Bomb /> : null}
+        <GlobalContextProvider>
+          <Switch>
+            {/* All routes should required authentication */}
+            <ProtectedRoute component={Pages} path="/" />
+            <Route path="*">
+              <Page404 />
+            </Route>
+          </Switch>
+          {explode ? <Bomb /> : null}
+        </GlobalContextProvider>
       </ErrorBoundary>
     </ApolloProvider>
   );
