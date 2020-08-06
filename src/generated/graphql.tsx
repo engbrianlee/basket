@@ -43,7 +43,6 @@ export type Int_Comparison_Exp = {
 
 export type JoinShoppingListOutput = {
   __typename?: 'JoinShoppingListOutput';
-  shopping_list?: Maybe<Shopping_Lists>;
   shopping_list_id: Scalars['uuid'];
 };
 
@@ -176,6 +175,19 @@ export type Current_User_Set_Input = {
   id?: Maybe<Scalars['String']>;
 };
 
+
+/** expression to compare columns of type json. All fields are combined with logical 'AND'. */
+export type Json_Comparison_Exp = {
+  _eq?: Maybe<Scalars['json']>;
+  _gt?: Maybe<Scalars['json']>;
+  _gte?: Maybe<Scalars['json']>;
+  _in?: Maybe<Array<Scalars['json']>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _lt?: Maybe<Scalars['json']>;
+  _lte?: Maybe<Scalars['json']>;
+  _neq?: Maybe<Scalars['json']>;
+  _nin?: Maybe<Array<Scalars['json']>>;
+};
 
 /** mutation root */
 export type Mutation_Root = {
@@ -2173,6 +2185,40 @@ export type CreateShoppingListMutation = (
   )> }
 );
 
+export type GetShoppingListQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type GetShoppingListQuery = (
+  { __typename?: 'query_root' }
+  & { shopping_lists_by_pk?: Maybe<(
+    { __typename?: 'shopping_lists' }
+    & { shopping_list_items: Array<(
+      { __typename?: 'shopping_list_items' }
+      & ShoppingListItemDataFragment
+    )> }
+    & ShoppingListDataFragment
+  )> }
+);
+
+export type SubscribeShoppingListSubscriptionVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type SubscribeShoppingListSubscription = (
+  { __typename?: 'subscription_root' }
+  & { shopping_lists_by_pk?: Maybe<(
+    { __typename?: 'shopping_lists' }
+    & { shopping_list_items: Array<(
+      { __typename?: 'shopping_list_items' }
+      & ShoppingListItemDataFragment
+    )> }
+    & ShoppingListDataFragment
+  )> }
+);
+
 export type JoinShoppingListMutationVariables = Exact<{
   id: Scalars['uuid'];
 }>;
@@ -2182,13 +2228,7 @@ export type JoinShoppingListMutation = (
   { __typename?: 'mutation_root' }
   & { join_shopping_list?: Maybe<(
     { __typename?: 'JoinShoppingListOutput' }
-    & { shopping_list?: Maybe<(
-      { __typename?: 'shopping_lists' }
-      & { shopping_list_items: Array<(
-        { __typename?: 'shopping_list_items' }
-        & Pick<Shopping_List_Items, 'id'>
-      )> }
-    )> }
+    & Pick<JoinShoppingListOutput, 'shopping_list_id'>
   )> }
 );
 
@@ -2202,14 +2242,7 @@ export type CreateShoppingListItemMutation = (
   { __typename?: 'mutation_root' }
   & { insert_shopping_list_items_one?: Maybe<(
     { __typename?: 'shopping_list_items' }
-    & Pick<Shopping_List_Items, 'created_at' | 'is_completed' | 'title' | 'updated_at'>
-    & { created_by_user: (
-      { __typename?: 'users' }
-      & Pick<Users, 'name' | 'public_id'>
-    ), updated_by_user: (
-      { __typename?: 'users' }
-      & Pick<Users, 'name' | 'public_id'>
-    ) }
+    & ShoppingListItemDataFragment
   )> }
 );
 
@@ -2236,7 +2269,7 @@ export type UpdateShoppingListItemMutation = (
   { __typename?: 'mutation_root' }
   & { update_shopping_list_items_by_pk?: Maybe<(
     { __typename?: 'shopping_list_items' }
-    & Pick<Shopping_List_Items, 'id'>
+    & ShoppingListItemDataFragment
   )> }
 );
 
@@ -2512,14 +2545,80 @@ export function useCreateShoppingListMutation(baseOptions?: ApolloReactHooks.Mut
 export type CreateShoppingListMutationHookResult = ReturnType<typeof useCreateShoppingListMutation>;
 export type CreateShoppingListMutationResult = ApolloReactCommon.MutationResult<CreateShoppingListMutation>;
 export type CreateShoppingListMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateShoppingListMutation, CreateShoppingListMutationVariables>;
+export const GetShoppingListDocument = gql`
+    query getShoppingList($id: uuid!) {
+  shopping_lists_by_pk(id: $id) {
+    ...ShoppingListData
+    shopping_list_items {
+      ...ShoppingListItemData
+    }
+  }
+}
+    ${ShoppingListDataFragmentDoc}
+${ShoppingListItemDataFragmentDoc}`;
+
+/**
+ * __useGetShoppingListQuery__
+ *
+ * To run a query within a React component, call `useGetShoppingListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetShoppingListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetShoppingListQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetShoppingListQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetShoppingListQuery, GetShoppingListQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetShoppingListQuery, GetShoppingListQueryVariables>(GetShoppingListDocument, baseOptions);
+      }
+export function useGetShoppingListLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetShoppingListQuery, GetShoppingListQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetShoppingListQuery, GetShoppingListQueryVariables>(GetShoppingListDocument, baseOptions);
+        }
+export type GetShoppingListQueryHookResult = ReturnType<typeof useGetShoppingListQuery>;
+export type GetShoppingListLazyQueryHookResult = ReturnType<typeof useGetShoppingListLazyQuery>;
+export type GetShoppingListQueryResult = ApolloReactCommon.QueryResult<GetShoppingListQuery, GetShoppingListQueryVariables>;
+export const SubscribeShoppingListDocument = gql`
+    subscription subscribeShoppingList($id: uuid!) {
+  shopping_lists_by_pk(id: $id) {
+    ...ShoppingListData
+    shopping_list_items {
+      ...ShoppingListItemData
+    }
+  }
+}
+    ${ShoppingListDataFragmentDoc}
+${ShoppingListItemDataFragmentDoc}`;
+
+/**
+ * __useSubscribeShoppingListSubscription__
+ *
+ * To run a query within a React component, call `useSubscribeShoppingListSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeShoppingListSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSubscribeShoppingListSubscription({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSubscribeShoppingListSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<SubscribeShoppingListSubscription, SubscribeShoppingListSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<SubscribeShoppingListSubscription, SubscribeShoppingListSubscriptionVariables>(SubscribeShoppingListDocument, baseOptions);
+      }
+export type SubscribeShoppingListSubscriptionHookResult = ReturnType<typeof useSubscribeShoppingListSubscription>;
+export type SubscribeShoppingListSubscriptionResult = ApolloReactCommon.SubscriptionResult<SubscribeShoppingListSubscription>;
 export const JoinShoppingListDocument = gql`
     mutation joinShoppingList($id: uuid!) {
   join_shopping_list(shopping_list_id: $id) {
-    shopping_list {
-      shopping_list_items {
-        id
-      }
-    }
+    shopping_list_id
   }
 }
     `;
@@ -2551,21 +2650,10 @@ export type JoinShoppingListMutationOptions = ApolloReactCommon.BaseMutationOpti
 export const CreateShoppingListItemDocument = gql`
     mutation createShoppingListItem($shopping_list_id: uuid!, $title: String!) {
   insert_shopping_list_items_one(object: {shopping_list_id: $shopping_list_id, title: $title}) {
-    created_at
-    created_by_user {
-      name
-      public_id
-    }
-    is_completed
-    title
-    updated_at
-    updated_by_user {
-      name
-      public_id
-    }
+    ...ShoppingListItemData
   }
 }
-    `;
+    ${ShoppingListItemDataFragmentDoc}`;
 export type CreateShoppingListItemMutationFn = ApolloReactCommon.MutationFunction<CreateShoppingListItemMutation, CreateShoppingListItemMutationVariables>;
 
 /**
@@ -2627,10 +2715,10 @@ export type DeleteShoppingListItemMutationOptions = ApolloReactCommon.BaseMutati
 export const UpdateShoppingListItemDocument = gql`
     mutation updateShoppingListItem($id: uuid!, $set_input: shopping_list_items_set_input!) {
   update_shopping_list_items_by_pk(pk_columns: {id: $id}, _set: $set_input) {
-    id
+    ...ShoppingListItemData
   }
 }
-    `;
+    ${ShoppingListItemDataFragmentDoc}`;
 export type UpdateShoppingListItemMutationFn = ApolloReactCommon.MutationFunction<UpdateShoppingListItemMutation, UpdateShoppingListItemMutationVariables>;
 
 /**

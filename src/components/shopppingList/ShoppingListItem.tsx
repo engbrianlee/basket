@@ -1,71 +1,65 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import {
-  ShoppingListDataFragment,
-  DeleteShoppingListMutationFn,
-  UpdateShoppingListMutationFn,
-} from "../../generated/graphql";
+
 import { formatDistanceToNow, differenceInSeconds } from "date-fns";
 import classNames from "classnames";
 import { motion, PanHandlers, PanInfo, AnimatePresence } from "framer-motion";
 import { gql } from "@apollo/client";
-import Creator from "./Creator";
-import ActiveUser from "./ActiveUser";
+
 import { HandlerFunction } from "@storybook/addon-actions";
-import AvatarWithPlaceholderInitials, {
-  parseInitials,
-  AVATAR_COLORS,
-  CURRENT_USER_AVATAR_COLOR,
-} from "../Avatar";
 import { usePrevious } from "../../hooks/utils";
-import { useHistory } from "react-router-dom";
+import {
+  ShoppingListItemDataFragment,
+  DeleteShoppingListItemMutationFn,
+  UpdateShoppingListItemMutationFn,
+} from "../../generated/graphql";
+import _ from "lodash";
 
-const DEFAULT_NEW_LIST_TITLE = "";
+const DEFAULT_NEW_LIST_ITEM_TITLE = "";
 
-type ShoppingListProps = {
-  shoppingList: ShoppingListDataFragment;
-  onDelete?: DeleteShoppingListMutationFn | HandlerFunction;
-  onUpdate: UpdateShoppingListMutationFn | HandlerFunction;
-} & typeof shoppingListDefaultProps;
-const shoppingListDefaultProps = {
-  canDelete: true,
+type ShoppingListItemProps = {
+  shoppingListItem: ShoppingListItemDataFragment;
+  onDelete: DeleteShoppingListItemMutationFn | HandlerFunction;
+  onUpdate: UpdateShoppingListItemMutationFn | HandlerFunction;
 };
 
 const fragment = gql`
-  fragment ShoppingListData on shopping_lists {
+  fragment ShoppingListItemData on shopping_list_items {
     id
-    updated_at
     created_at
-    title
-    creator {
-      ...CreatorData
+    created_by_user {
+      name
+      public_id
     }
-    active_users {
-      ...ActiveUserData
+    is_completed
+    title
+    updated_at
+    updated_by_user {
+      name
+      public_id
     }
   }
-  ${ActiveUser.fragment}
-  ${Creator.fragment}
 `;
 
 // Kindy hacky, but works for now. We want to be able to determine if a shopping
-// list has just been created so we can start in editing mode.
-const isNewList = (shoppingList: ShoppingListProps["shoppingList"]) =>
-  differenceInSeconds(new Date(), new Date(shoppingList.created_at)) < 2 &&
-  shoppingList.created_at === shoppingList.updated_at &&
-  shoppingList.title === DEFAULT_NEW_LIST_TITLE;
+// listitem has just been created so we can start in editing mode.
+const newListItem = (
+  shoppingListItem: ShoppingListItemProps["shoppingListItem"]
+) =>
+  differenceInSeconds(new Date(), new Date(shoppingListItem.created_at)) < 2 &&
+  shoppingListItem.created_at === shoppingListItem.updated_at &&
+  shoppingListItem.title === DEFAULT_NEW_LIST_ITEM_TITLE;
 
-const ShoppingList = ({
-  shoppingList,
-  canDelete,
+const ShoppingListItem = ({
+  shoppingListItem,
   onDelete,
   onUpdate,
-}: ShoppingListProps) => {
-  const history = useHistory();
-  const startInEditing = isNewList(shoppingList);
+}: ShoppingListItemProps) => {
+  const startInEditing = newListItem(shoppingListItem);
   const [showMenu, setShowMenu] = useState(startInEditing);
+  const [showChat, setShowChat] = useState(false);
   const [isEditing, setIsEditing] = useState(startInEditing);
   const [editedTitle, setEditedTitle] = useState(
-    startInEditing ? "" : shoppingList.title
+    startInEditing ? "" : shoppingListItem.title
   );
   const prevIsEditing = usePrevious(isEditing);
 
@@ -79,31 +73,50 @@ const ShoppingList = ({
   };
   const didClick = () =>
     isMouseDown.current && !isPanning.current && !prevIsPanning.current;
-
   const onSubmit = useCallback(
-    (title: typeof editedTitle) => {
-      if (onDelete && startInEditing && !title) {
+    (set_input: {
+      title?: typeof editedTitle;
+      is_completed?: typeof shoppingListItem.is_completed;
+    }) => {
+      if (onDelete && startInEditing && !set_input.title) {
         onDelete({
-          variables: { id: shoppingList.id },
+          variables: { id: shoppingListItem.id },
           optimisticResponse: {
-            delete_shopping_lists_by_pk: { id: shoppingList.id },
+            delete_shopping_list_items_by_pk: { id: shoppingListItem.id },
           },
         });
-      } else if (title && title !== shoppingList.title)
-        onUpdate({
-          variables: {
-            id: shoppingList.id,
-            set_input: { title: title },
-          },
+      } else if (
+        !_.isEmpty(set_input) &&
+        !_.isMatch(shoppingListItem, set_input)
+      )
+        console.log({
           optimisticResponse: {
-            update_shopping_lists_by_pk: {
-              ...shoppingList,
-              title: title,
+            update_shopping_list_items_by_pk: {
+              ...shoppingListItem,
+              ...set_input,
             },
           },
         });
+      console.log({
+        variables: {
+          id: shoppingListItem.id,
+          set_input,
+        },
+      });
+      onUpdate({
+        variables: {
+          id: shoppingListItem.id,
+          set_input,
+        },
+        optimisticResponse: {
+          update_shopping_list_items_by_pk: {
+            ...shoppingListItem,
+            ...set_input,
+          },
+        },
+      });
     },
-    [editedTitle, onDelete, startInEditing, shoppingList, onUpdate]
+    [editedTitle, onDelete, startInEditing, shoppingListItem, onUpdate]
   );
 
   const onPanEnd: PanHandlers["onPanEnd"] = (_event, info) => {
@@ -139,12 +152,14 @@ const ShoppingList = ({
 
   useEffect(() => {
     if (prevIsEditing && !isEditing) {
-      onSubmit(editedTitle);
+      console.log(newListItem);
+
+      onSubmit({ title: editedTitle });
       if (showMenu) {
         setShowMenu(false);
       }
     }
-  }, [isEditing, onSubmit, showMenu, prevIsEditing, editedTitle]);
+  }, [isEditing, showMenu, prevIsEditing, editedTitle, onSubmit]);
 
   return (
     <motion.article
@@ -152,7 +167,7 @@ const ShoppingList = ({
       onPanEnd={onPanEnd}
       onMouseUp={() => {
         if (didClick()) {
-          history.push(`/shopping-list/${shoppingList.id}`);
+          setShowChat(true);
         }
         setIsPanning(false);
         isMouseDown.current = false;
@@ -160,7 +175,7 @@ const ShoppingList = ({
       onMouseDown={() => (isMouseDown.current = true)}
       className="flex items-center justify-between w-full h-16 px-3 overflow-hidden bg-gray-300 rounded-lg dark:text-gray-900"
     >
-      <div>
+      <div className="w-full">
         {isEditing ? (
           <form
             onBlur={(e) => {
@@ -181,25 +196,47 @@ const ShoppingList = ({
             />
           </form>
         ) : (
-          <motion.div layout="position">
-            <h2 className="text-xl font-bold leading-none">
-              {shoppingList.title}
-            </h2>
+          <div className="flex items-center h-full space-x-4">
+            <input
+              type="checkbox"
+              className="form-checkbox"
+              checked={shoppingListItem.is_completed}
+              onChange={(e) => {
+                const is_completed = e.target.checked;
+                onSubmit({ is_completed });
+              }}
+            />
 
-            {!showMenu && (
-              <motion.span
-                animate={{ opacity: 1 }}
-                className="text-sm font-light leading-none text-gray-600"
-              >
-                modified{" "}
-                <time dateTime={shoppingList.updated_at}>
-                  {formatDistanceToNow(new Date(shoppingList.updated_at), {
-                    addSuffix: true,
-                  })}
-                </time>
-              </motion.span>
-            )}
-          </motion.div>
+            <motion.div
+              layout="position"
+              onDoubleClick={() => setIsEditing(true)}
+            >
+              <h2 className="text-xl font-bold leading-none">
+                {shoppingListItem.title}
+              </h2>
+
+              {!showMenu && (
+                <motion.span
+                  animate={{ opacity: 1 }}
+                  className="text-sm font-light leading-none text-gray-600"
+                >
+                  modified{" "}
+                  <time dateTime={shoppingListItem.updated_at}>
+                    {formatDistanceToNow(
+                      new Date(shoppingListItem.updated_at),
+                      {
+                        addSuffix: true,
+                      }
+                    )}
+                  </time>
+                </motion.span>
+              )}
+            </motion.div>
+            <button
+              className="flex-grow w-0 h-16"
+              onClick={() => setShowChat(true)}
+            />
+          </div>
         )}
       </div>
 
@@ -259,15 +296,15 @@ const ShoppingList = ({
                     </div>
                   </button>
                 )}
-                {canDelete && onDelete && (
+                {
                   <button
                     className="h-full"
                     onClick={() =>
                       onDelete({
-                        variables: { id: shoppingList.id },
+                        variables: { id: shoppingListItem.id },
                         optimisticResponse: {
-                          delete_shopping_lists_by_pk: {
-                            id: shoppingList.id,
+                          delete_shopping_list_items_by_pk: {
+                            id: shoppingListItem.id,
                           },
                         },
                       })
@@ -277,7 +314,7 @@ const ShoppingList = ({
                       Delete
                     </div>
                   </button>
-                )}
+                }
               </motion.div>
             </>
           ) : (
@@ -293,19 +330,7 @@ const ShoppingList = ({
                 }}
                 className="flex items-center -space-x-2"
               >
-                {shoppingList.active_users.map((activeUser, i) => (
-                  <AvatarWithPlaceholderInitials
-                    key={activeUser.user.public_id}
-                    initials={parseInitials(activeUser.user.name)}
-                    className={classNames(
-                      activeUser.user.public_id ===
-                        shoppingList.creator.public_id
-                        ? CURRENT_USER_AVATAR_COLOR
-                        : AVATAR_COLORS[i % AVATAR_COLORS.length],
-                      "text-lg text-white w-9 h-9 shadow-solid"
-                    )}
-                  />
-                ))}
+                chats
               </motion.div>
               <motion.button
                 layout
@@ -336,8 +361,7 @@ const ShoppingList = ({
     </motion.article>
   );
 };
-ShoppingList.defaultProps = shoppingListDefaultProps;
-ShoppingList.fragment = fragment;
+ShoppingListItem.fragment = fragment;
 
-export { DEFAULT_NEW_LIST_TITLE };
-export default ShoppingList;
+export { DEFAULT_NEW_LIST_ITEM_TITLE };
+export default ShoppingListItem;

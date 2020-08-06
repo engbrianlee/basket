@@ -2,65 +2,129 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import Layout from "../layout/Layout";
 import { gql } from "@apollo/client";
-import { useJoinShoppingListMutation } from "../generated/graphql";
-import ShoppingList from "../components/dashboard/ShoppingList";
+import {
+  useJoinShoppingListMutation,
+  useDeleteShoppingListItemMutation,
+  useUpdateShoppingListItemMutation,
+  useGetShoppingListQuery,
+} from "../generated/graphql";
 import Loading from "../components/Loading";
 import { ApolloDataNotFoundError } from "../lib/error";
+import ShoppingListItem from "../components/shopppingList/ShoppingListItem";
+import ShoppingList from "../components/dashboard/ShoppingList";
 
 const PageShoppingList = () => {
   const { id } = useParams();
-  const [
-    joinShoppingList,
-    { loading, data, called },
-  ] = useJoinShoppingListMutation();
+  const { data, loading, subscribeToMore } = useGetShoppingListQuery({
+    variables: { id },
+  });
+  const [joinShoppingList] = useJoinShoppingListMutation();
+
+  const [onDelete] = useDeleteShoppingListItemMutation();
+  const [onUpdate] = useUpdateShoppingListItemMutation();
 
   useEffect(() => {
     joinShoppingList({ variables: { id } });
-  }, [id, joinShoppingList]);
+    subscribeToMore({
+      variables: { id },
+      document: SUBSCRIBE_SHOPPING_LIST,
+    });
+  }, [id, joinShoppingList, subscribeToMore]);
 
-  if (!called || loading) {
+  if (loading) {
     return <Loading />;
   }
-  const shopping_list = data?.join_shopping_list?.shopping_list;
+  const shopping_list = data?.shopping_lists_by_pk;
   if (!shopping_list) {
     throw new ApolloDataNotFoundError({ shopping_list });
   }
 
-  return <Layout>{JSON.stringify(shopping_list)}</Layout>;
+  return (
+    <Layout>
+      {shopping_list.shopping_list_items.map((shoppingListItem) => (
+        <ShoppingListItem
+          key={shoppingListItem.id}
+          shoppingListItem={shoppingListItem}
+          onDelete={onDelete}
+          onUpdate={onUpdate}
+        />
+      ))}
+    </Layout>
+  );
 };
-
-const JOIN_SHOPPING_LIST = gql`
-  mutation joinShoppingList($id: uuid!) {
-    join_shopping_list(shopping_list_id: $id) {
-      shopping_list {
-        ...ShoppingListData
+const GET_SHOPPING_LIST = gql`
+query getShoppingList($id: uuid!) {
+  shopping_lists_by_pk(id: $id) {
+      ...ShoppingListData
+      shopping_list_items {
+      ...ShoppingListItemData  
+      }
+  }
+  ${ShoppingList.fragment}
+  ${ShoppingListItem.fragment}
+}
+`;
+const SUBSCRIBE_SHOPPING_LIST = gql`
+  subscription subscribeShoppingList($id: uuid!) {
+    shopping_lists_by_pk(id: $id) {
+      ...ShoppingListData
+      shopping_list_items {
+        ...ShoppingListItemData
       }
     }
   }
   ${ShoppingList.fragment}
+  ${ShoppingListItem.fragment}
 `;
-
-const CREATE_LIST_ITEM = gql`
-  mutation createListItem($shopping_list_id: uuid!, $title: String!) {
-    insert_list_items_one(
-      object: { shopping_list_id: $shopping_list_id, title: $title }
-    ) {
-      created_at
-      created_by_user {
-        name
-        public_id
-      }
-      is_completed
-      title
-      updated_at
-      updated_by_user {
-        name
-        public_id
-      }
+const JOIN_SHOPPING_LIST = gql`
+  mutation joinShoppingList($id: uuid!) {
+    join_shopping_list(shopping_list_id: $id) {
+      shopping_list_id
     }
   }
 `;
 
-export { JOIN_SHOPPING_LIST, CREATE_LIST_ITEM };
+const CREATE_SHOPPING_LIST_ITEM = gql`
+  mutation createShoppingListItem($shopping_list_id: uuid!, $title: String!) {
+    insert_shopping_list_items_one(
+      object: { shopping_list_id: $shopping_list_id, title: $title }
+    ) {
+      ...ShoppingListItemData
+    }
+  }
+  ${ShoppingListItem.fragment}
+`;
+
+const DELETE_SHOPPING_LIST_ITEM = gql`
+  mutation deleteShoppingListItem($id: uuid!) {
+    delete_shopping_list_items_by_pk(id: $id) {
+      id
+    }
+  }
+`;
+
+const UPDATE_SHOPPING_LIST_ITEM = gql`
+  mutation updateShoppingListItem(
+    $id: uuid!
+    $set_input: shopping_list_items_set_input!
+  ) {
+    update_shopping_list_items_by_pk(
+      pk_columns: { id: $id }
+      _set: $set_input
+    ) {
+      ...ShoppingListItemData
+    }
+  }
+  ${ShoppingListItem.fragment}
+`;
+
+export {
+  JOIN_SHOPPING_LIST,
+  CREATE_SHOPPING_LIST_ITEM,
+  DELETE_SHOPPING_LIST_ITEM,
+  UPDATE_SHOPPING_LIST_ITEM,
+  SUBSCRIBE_SHOPPING_LIST,
+  GET_SHOPPING_LIST,
+};
 
 export default PageShoppingList;
