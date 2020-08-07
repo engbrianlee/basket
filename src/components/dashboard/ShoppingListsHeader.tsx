@@ -15,7 +15,7 @@ const ShoppingListsHeader = ({
   return (
     <header>
       <nav className="flex items-center justify-center">
-        <div className="flex items-center justify-start flex-1 w-0 mr-auto">
+        <div className="flex items-center justify-start flex-1 mr-auto">
           <svg fill="currentColor" viewBox="0 0 20 20" className="w-8 h-8">
             <path
               fillRule="evenodd"
@@ -24,10 +24,10 @@ const ShoppingListsHeader = ({
             ></path>
           </svg>
         </div>
-        <h1 className="text-3xl font-bold ">{`${parseFirstName(
+        <h1 className="text-3xl font-bold truncate">{`${parseFirstName(
           currentUser.name
         )}'s Lists`}</h1>
-        <div className="flex items-center justify-end flex-1 w-0 ml-auto">
+        <div className="flex items-center justify-end flex-1 ml-auto">
           <Tooltip
             html={
               <button

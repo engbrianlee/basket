@@ -30,14 +30,21 @@ const JoinedShoppingLists = () => {
   }
 
   return (
-    <div className="w-full space-y-2">
-      {joined_shopping_lists.map(({ shopping_list: shoppingList }) => (
-        <ShoppingList
-          key={shoppingList.id}
-          shoppingList={shoppingList}
-          onUpdate={onUpdate}
-        />
-      ))}
+    <div className="flex flex-col items-center justify-between flex-1 flex-grow mt-4 overflow-auto">
+      <div
+        className="flex w-full overflow-auto scrolling-auto"
+        style={{ minHeight: "min-content" }}
+      >
+        <div className="w-full space-y-2">
+          {joined_shopping_lists.map(({ shopping_list: shoppingList }) => (
+            <ShoppingList
+              key={shoppingList.id}
+              shoppingList={shoppingList}
+              onUpdate={onUpdate}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

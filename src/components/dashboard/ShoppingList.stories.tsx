@@ -1,5 +1,5 @@
 import React from "react";
-import ShoppingList, { DEFAULT_NEW_LIST_TITLE } from "./ShoppingList";
+import ShoppingList from "./ShoppingList";
 import { ShoppingListDataFragment } from "../../generated/graphql";
 import { action } from "@storybook/addon-actions";
 
@@ -67,18 +67,3 @@ export const Default = () => (
 export const CantDelete = () => (
   <ShoppingList shoppingList={taskData} canDelete={false} {...actionsData} />
 );
-
-export const NewlyCreated = () => {
-  const now = new Date().toISOString();
-  return (
-    <ShoppingList
-      shoppingList={{
-        ...taskData,
-        title: DEFAULT_NEW_LIST_TITLE,
-        created_at: now,
-        updated_at: now,
-      }}
-      {...actionsData}
-    />
-  );
-};

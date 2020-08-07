@@ -4,11 +4,11 @@ import {
   DeleteShoppingListMutationFn,
   UpdateShoppingListMutationFn,
 } from "../../generated/graphql";
-import { formatDistanceToNow, differenceInSeconds } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import classNames from "classnames";
 import { motion, PanHandlers, PanInfo, AnimatePresence } from "framer-motion";
 import { gql } from "@apollo/client";
-import Creator from "./Creator";
+import User from "./User";
 import ActiveUser from "./ActiveUser";
 import { HandlerFunction } from "@storybook/addon-actions";
 import AvatarWithPlaceholderInitials, {
@@ -18,8 +18,6 @@ import AvatarWithPlaceholderInitials, {
 } from "../Avatar";
 import { usePrevious } from "../../hooks/utils";
 import { useHistory } from "react-router-dom";
-
-const DEFAULT_NEW_LIST_TITLE = "";
 
 type ShoppingListProps = {
   shoppingList: ShoppingListDataFragment;
@@ -37,22 +35,15 @@ const fragment = gql`
     created_at
     title
     creator {
-      ...CreatorData
+      ...UserData
     }
     active_users {
       ...ActiveUserData
     }
   }
   ${ActiveUser.fragment}
-  ${Creator.fragment}
+  ${User.fragment}
 `;
-
-// Kindy hacky, but works for now. We want to be able to determine if a shopping
-// list has just been created so we can start in editing mode.
-const isNewList = (shoppingList: ShoppingListProps["shoppingList"]) =>
-  differenceInSeconds(new Date(), new Date(shoppingList.created_at)) < 2 &&
-  shoppingList.created_at === shoppingList.updated_at &&
-  shoppingList.title === DEFAULT_NEW_LIST_TITLE;
 
 const ShoppingList = ({
   shoppingList,
@@ -61,12 +52,9 @@ const ShoppingList = ({
   onUpdate,
 }: ShoppingListProps) => {
   const history = useHistory();
-  const startInEditing = isNewList(shoppingList);
-  const [showMenu, setShowMenu] = useState(startInEditing);
-  const [isEditing, setIsEditing] = useState(startInEditing);
-  const [editedTitle, setEditedTitle] = useState(
-    startInEditing ? "" : shoppingList.title
-  );
+  const [showMenu, setShowMenu] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(shoppingList.title);
   const prevIsEditing = usePrevious(isEditing);
 
   // Use three boolean to determine if person is clicking and not panning
@@ -82,14 +70,7 @@ const ShoppingList = ({
 
   const onSubmit = useCallback(
     (title: typeof editedTitle) => {
-      if (onDelete && startInEditing && !title) {
-        onDelete({
-          variables: { id: shoppingList.id },
-          optimisticResponse: {
-            delete_shopping_lists_by_pk: { id: shoppingList.id },
-          },
-        });
-      } else if (title && title !== shoppingList.title)
+      if (title && title !== shoppingList.title)
         onUpdate({
           variables: {
             id: shoppingList.id,
@@ -103,7 +84,7 @@ const ShoppingList = ({
           },
         });
     },
-    [editedTitle, onDelete, startInEditing, shoppingList, onUpdate]
+    [editedTitle, shoppingList, onUpdate]
   );
 
   const onPanEnd: PanHandlers["onPanEnd"] = (_event, info) => {
@@ -160,7 +141,7 @@ const ShoppingList = ({
       onMouseDown={() => (isMouseDown.current = true)}
       className="flex items-center justify-between w-full h-16 px-3 overflow-hidden bg-gray-300 rounded-lg dark:text-gray-900"
     >
-      <div>
+      <div className="truncate">
         {isEditing ? (
           <form
             onBlur={(e) => {
@@ -181,15 +162,13 @@ const ShoppingList = ({
             />
           </form>
         ) : (
-          <motion.div layout="position">
-            <h2 className="text-xl font-bold leading-none">
-              {shoppingList.title}
-            </h2>
+          <motion.div layout="position" className="truncate">
+            <h2 className="text-xl font-bold truncate">{shoppingList.title}</h2>
 
             {!showMenu && (
               <motion.span
                 animate={{ opacity: 1 }}
-                className="text-sm font-light leading-none text-gray-600"
+                className="text-sm font-light leading-none text-gray-600 truncate"
               >
                 modified{" "}
                 <time dateTime={shoppingList.updated_at}>
@@ -339,5 +318,4 @@ const ShoppingList = ({
 ShoppingList.defaultProps = shoppingListDefaultProps;
 ShoppingList.fragment = fragment;
 
-export { DEFAULT_NEW_LIST_TITLE };
 export default ShoppingList;

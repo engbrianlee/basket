@@ -65,6 +65,199 @@ export type String_Comparison_Exp = {
   _similar?: Maybe<Scalars['String']>;
 };
 
+/** columns and relationships of "chat_messages" */
+export type Chat_Messages = {
+  __typename?: 'chat_messages';
+  created_at: Scalars['timestamptz'];
+  created_by: Scalars['String'];
+  /** An object relationship */
+  creator: Users;
+  id: Scalars['uuid'];
+  message: Scalars['String'];
+  /** An object relationship */
+  shopping_list_item: Shopping_List_Items;
+  shopping_list_item_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "chat_messages" */
+export type Chat_Messages_Aggregate = {
+  __typename?: 'chat_messages_aggregate';
+  aggregate?: Maybe<Chat_Messages_Aggregate_Fields>;
+  nodes: Array<Chat_Messages>;
+};
+
+/** aggregate fields of "chat_messages" */
+export type Chat_Messages_Aggregate_Fields = {
+  __typename?: 'chat_messages_aggregate_fields';
+  count?: Maybe<Scalars['Int']>;
+  max?: Maybe<Chat_Messages_Max_Fields>;
+  min?: Maybe<Chat_Messages_Min_Fields>;
+};
+
+
+/** aggregate fields of "chat_messages" */
+export type Chat_Messages_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Chat_Messages_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "chat_messages" */
+export type Chat_Messages_Aggregate_Order_By = {
+  count?: Maybe<Order_By>;
+  max?: Maybe<Chat_Messages_Max_Order_By>;
+  min?: Maybe<Chat_Messages_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "chat_messages" */
+export type Chat_Messages_Arr_Rel_Insert_Input = {
+  data: Array<Chat_Messages_Insert_Input>;
+  on_conflict?: Maybe<Chat_Messages_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "chat_messages". All fields are combined with a logical 'AND'. */
+export type Chat_Messages_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Chat_Messages_Bool_Exp>>>;
+  _not?: Maybe<Chat_Messages_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Chat_Messages_Bool_Exp>>>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  created_by?: Maybe<String_Comparison_Exp>;
+  creator?: Maybe<Users_Bool_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  message?: Maybe<String_Comparison_Exp>;
+  shopping_list_item?: Maybe<Shopping_List_Items_Bool_Exp>;
+  shopping_list_item_id?: Maybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "chat_messages" */
+export enum Chat_Messages_Constraint {
+  /** unique or primary key constraint */
+  ChatMessagesPkey = 'chat_messages_pkey'
+}
+
+/** input type for inserting data into table "chat_messages" */
+export type Chat_Messages_Insert_Input = {
+  created_at?: Maybe<Scalars['timestamptz']>;
+  created_by?: Maybe<Scalars['String']>;
+  creator?: Maybe<Users_Obj_Rel_Insert_Input>;
+  id?: Maybe<Scalars['uuid']>;
+  message?: Maybe<Scalars['String']>;
+  shopping_list_item?: Maybe<Shopping_List_Items_Obj_Rel_Insert_Input>;
+  shopping_list_item_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Chat_Messages_Max_Fields = {
+  __typename?: 'chat_messages_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  created_by?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  message?: Maybe<Scalars['String']>;
+  shopping_list_item_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "chat_messages" */
+export type Chat_Messages_Max_Order_By = {
+  created_at?: Maybe<Order_By>;
+  created_by?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  message?: Maybe<Order_By>;
+  shopping_list_item_id?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Chat_Messages_Min_Fields = {
+  __typename?: 'chat_messages_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  created_by?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  message?: Maybe<Scalars['String']>;
+  shopping_list_item_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "chat_messages" */
+export type Chat_Messages_Min_Order_By = {
+  created_at?: Maybe<Order_By>;
+  created_by?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  message?: Maybe<Order_By>;
+  shopping_list_item_id?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "chat_messages" */
+export type Chat_Messages_Mutation_Response = {
+  __typename?: 'chat_messages_mutation_response';
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  returning: Array<Chat_Messages>;
+};
+
+/** input type for inserting object relation for remote table "chat_messages" */
+export type Chat_Messages_Obj_Rel_Insert_Input = {
+  data: Chat_Messages_Insert_Input;
+  on_conflict?: Maybe<Chat_Messages_On_Conflict>;
+};
+
+/** on conflict condition type for table "chat_messages" */
+export type Chat_Messages_On_Conflict = {
+  constraint: Chat_Messages_Constraint;
+  update_columns: Array<Chat_Messages_Update_Column>;
+  where?: Maybe<Chat_Messages_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "chat_messages" */
+export type Chat_Messages_Order_By = {
+  created_at?: Maybe<Order_By>;
+  created_by?: Maybe<Order_By>;
+  creator?: Maybe<Users_Order_By>;
+  id?: Maybe<Order_By>;
+  message?: Maybe<Order_By>;
+  shopping_list_item?: Maybe<Shopping_List_Items_Order_By>;
+  shopping_list_item_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "chat_messages" */
+export type Chat_Messages_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "chat_messages" */
+export enum Chat_Messages_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  CreatedBy = 'created_by',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Message = 'message',
+  /** column name */
+  ShoppingListItemId = 'shopping_list_item_id'
+}
+
+/** input type for updating data in table "chat_messages" */
+export type Chat_Messages_Set_Input = {
+  created_at?: Maybe<Scalars['timestamptz']>;
+  created_by?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  message?: Maybe<Scalars['String']>;
+  shopping_list_item_id?: Maybe<Scalars['uuid']>;
+};
+
+/** update columns of table "chat_messages" */
+export enum Chat_Messages_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  CreatedBy = 'created_by',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Message = 'message',
+  /** column name */
+  ShoppingListItemId = 'shopping_list_item_id'
+}
+
 /** columns and relationships of "current_user" */
 export type Current_User = {
   __typename?: 'current_user';
@@ -192,6 +385,10 @@ export type Json_Comparison_Exp = {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
+  /** delete data from the table: "chat_messages" */
+  delete_chat_messages?: Maybe<Chat_Messages_Mutation_Response>;
+  /** delete single row from the table: "chat_messages" */
+  delete_chat_messages_by_pk?: Maybe<Chat_Messages>;
   /** delete data from the table: "current_user" */
   delete_current_user?: Maybe<Current_User_Mutation_Response>;
   /** delete data from the table: "private_user_data" */
@@ -200,10 +397,6 @@ export type Mutation_Root = {
   delete_shopping_list_active_users?: Maybe<Shopping_List_Active_Users_Mutation_Response>;
   /** delete single row from the table: "shopping_list_active_users" */
   delete_shopping_list_active_users_by_pk?: Maybe<Shopping_List_Active_Users>;
-  /** delete data from the table: "shopping_list_codes" */
-  delete_shopping_list_codes?: Maybe<Shopping_List_Codes_Mutation_Response>;
-  /** delete single row from the table: "shopping_list_codes" */
-  delete_shopping_list_codes_by_pk?: Maybe<Shopping_List_Codes>;
   /** delete data from the table: "shopping_list_items" */
   delete_shopping_list_items?: Maybe<Shopping_List_Items_Mutation_Response>;
   /** delete single row from the table: "shopping_list_items" */
@@ -216,6 +409,10 @@ export type Mutation_Root = {
   delete_users?: Maybe<Users_Mutation_Response>;
   /** delete single row from the table: "users" */
   delete_users_by_pk?: Maybe<Users>;
+  /** insert data into the table: "chat_messages" */
+  insert_chat_messages?: Maybe<Chat_Messages_Mutation_Response>;
+  /** insert a single row into the table: "chat_messages" */
+  insert_chat_messages_one?: Maybe<Chat_Messages>;
   /** insert data into the table: "current_user" */
   insert_current_user?: Maybe<Current_User_Mutation_Response>;
   /** insert a single row into the table: "current_user" */
@@ -228,10 +425,6 @@ export type Mutation_Root = {
   insert_shopping_list_active_users?: Maybe<Shopping_List_Active_Users_Mutation_Response>;
   /** insert a single row into the table: "shopping_list_active_users" */
   insert_shopping_list_active_users_one?: Maybe<Shopping_List_Active_Users>;
-  /** insert data into the table: "shopping_list_codes" */
-  insert_shopping_list_codes?: Maybe<Shopping_List_Codes_Mutation_Response>;
-  /** insert a single row into the table: "shopping_list_codes" */
-  insert_shopping_list_codes_one?: Maybe<Shopping_List_Codes>;
   /** insert data into the table: "shopping_list_items" */
   insert_shopping_list_items?: Maybe<Shopping_List_Items_Mutation_Response>;
   /** insert a single row into the table: "shopping_list_items" */
@@ -246,6 +439,10 @@ export type Mutation_Root = {
   insert_users_one?: Maybe<Users>;
   /** perform the action: "join_shopping_list" */
   join_shopping_list?: Maybe<JoinShoppingListOutput>;
+  /** update data of the table: "chat_messages" */
+  update_chat_messages?: Maybe<Chat_Messages_Mutation_Response>;
+  /** update single row of the table: "chat_messages" */
+  update_chat_messages_by_pk?: Maybe<Chat_Messages>;
   /** update data of the table: "current_user" */
   update_current_user?: Maybe<Current_User_Mutation_Response>;
   /** update data of the table: "private_user_data" */
@@ -254,10 +451,6 @@ export type Mutation_Root = {
   update_shopping_list_active_users?: Maybe<Shopping_List_Active_Users_Mutation_Response>;
   /** update single row of the table: "shopping_list_active_users" */
   update_shopping_list_active_users_by_pk?: Maybe<Shopping_List_Active_Users>;
-  /** update data of the table: "shopping_list_codes" */
-  update_shopping_list_codes?: Maybe<Shopping_List_Codes_Mutation_Response>;
-  /** update single row of the table: "shopping_list_codes" */
-  update_shopping_list_codes_by_pk?: Maybe<Shopping_List_Codes>;
   /** update data of the table: "shopping_list_items" */
   update_shopping_list_items?: Maybe<Shopping_List_Items_Mutation_Response>;
   /** update single row of the table: "shopping_list_items" */
@@ -270,6 +463,18 @@ export type Mutation_Root = {
   update_users?: Maybe<Users_Mutation_Response>;
   /** update single row of the table: "users" */
   update_users_by_pk?: Maybe<Users>;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Chat_MessagesArgs = {
+  where: Chat_Messages_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Chat_Messages_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -294,18 +499,6 @@ export type Mutation_RootDelete_Shopping_List_Active_UsersArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Shopping_List_Active_Users_By_PkArgs = {
   id: Scalars['Int'];
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Shopping_List_CodesArgs = {
-  where: Shopping_List_Codes_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Shopping_List_Codes_By_PkArgs = {
-  id: Scalars['uuid'];
 };
 
 
@@ -346,6 +539,20 @@ export type Mutation_RootDelete_Users_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Chat_MessagesArgs = {
+  objects: Array<Chat_Messages_Insert_Input>;
+  on_conflict?: Maybe<Chat_Messages_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Chat_Messages_OneArgs = {
+  object: Chat_Messages_Insert_Input;
+  on_conflict?: Maybe<Chat_Messages_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_Current_UserArgs = {
   objects: Array<Current_User_Insert_Input>;
 };
@@ -380,20 +587,6 @@ export type Mutation_RootInsert_Shopping_List_Active_UsersArgs = {
 export type Mutation_RootInsert_Shopping_List_Active_Users_OneArgs = {
   object: Shopping_List_Active_Users_Insert_Input;
   on_conflict?: Maybe<Shopping_List_Active_Users_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Shopping_List_CodesArgs = {
-  objects: Array<Shopping_List_Codes_Insert_Input>;
-  on_conflict?: Maybe<Shopping_List_Codes_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Shopping_List_Codes_OneArgs = {
-  object: Shopping_List_Codes_Insert_Input;
-  on_conflict?: Maybe<Shopping_List_Codes_On_Conflict>;
 };
 
 
@@ -446,6 +639,20 @@ export type Mutation_RootJoin_Shopping_ListArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Chat_MessagesArgs = {
+  _set?: Maybe<Chat_Messages_Set_Input>;
+  where: Chat_Messages_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Chat_Messages_By_PkArgs = {
+  _set?: Maybe<Chat_Messages_Set_Input>;
+  pk_columns: Chat_Messages_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Current_UserArgs = {
   _set?: Maybe<Current_User_Set_Input>;
   where: Current_User_Bool_Exp;
@@ -472,20 +679,6 @@ export type Mutation_RootUpdate_Shopping_List_Active_Users_By_PkArgs = {
   _inc?: Maybe<Shopping_List_Active_Users_Inc_Input>;
   _set?: Maybe<Shopping_List_Active_Users_Set_Input>;
   pk_columns: Shopping_List_Active_Users_Pk_Columns_Input;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Shopping_List_CodesArgs = {
-  _set?: Maybe<Shopping_List_Codes_Set_Input>;
-  where: Shopping_List_Codes_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Shopping_List_Codes_By_PkArgs = {
-  _set?: Maybe<Shopping_List_Codes_Set_Input>;
-  pk_columns: Shopping_List_Codes_Pk_Columns_Input;
 };
 
 
@@ -665,6 +858,12 @@ export type Private_User_Data_Set_Input = {
 /** query root */
 export type Query_Root = {
   __typename?: 'query_root';
+  /** fetch data from the table: "chat_messages" */
+  chat_messages: Array<Chat_Messages>;
+  /** fetch aggregated fields from the table: "chat_messages" */
+  chat_messages_aggregate: Chat_Messages_Aggregate;
+  /** fetch data from the table: "chat_messages" using primary key columns */
+  chat_messages_by_pk?: Maybe<Chat_Messages>;
   /** fetch data from the table: "current_user" */
   current_user: Array<Current_User>;
   /** fetch aggregated fields from the table: "current_user" */
@@ -679,12 +878,6 @@ export type Query_Root = {
   shopping_list_active_users_aggregate: Shopping_List_Active_Users_Aggregate;
   /** fetch data from the table: "shopping_list_active_users" using primary key columns */
   shopping_list_active_users_by_pk?: Maybe<Shopping_List_Active_Users>;
-  /** fetch data from the table: "shopping_list_codes" */
-  shopping_list_codes: Array<Shopping_List_Codes>;
-  /** fetch aggregated fields from the table: "shopping_list_codes" */
-  shopping_list_codes_aggregate: Shopping_List_Codes_Aggregate;
-  /** fetch data from the table: "shopping_list_codes" using primary key columns */
-  shopping_list_codes_by_pk?: Maybe<Shopping_List_Codes>;
   /** fetch data from the table: "shopping_list_items" */
   shopping_list_items: Array<Shopping_List_Items>;
   /** fetch aggregated fields from the table: "shopping_list_items" */
@@ -703,6 +896,32 @@ export type Query_Root = {
   users_aggregate: Users_Aggregate;
   /** fetch data from the table: "users" using primary key columns */
   users_by_pk?: Maybe<Users>;
+};
+
+
+/** query root */
+export type Query_RootChat_MessagesArgs = {
+  distinct_on?: Maybe<Array<Chat_Messages_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Chat_Messages_Order_By>>;
+  where?: Maybe<Chat_Messages_Bool_Exp>;
+};
+
+
+/** query root */
+export type Query_RootChat_Messages_AggregateArgs = {
+  distinct_on?: Maybe<Array<Chat_Messages_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Chat_Messages_Order_By>>;
+  where?: Maybe<Chat_Messages_Bool_Exp>;
+};
+
+
+/** query root */
+export type Query_RootChat_Messages_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -769,32 +988,6 @@ export type Query_RootShopping_List_Active_Users_AggregateArgs = {
 /** query root */
 export type Query_RootShopping_List_Active_Users_By_PkArgs = {
   id: Scalars['Int'];
-};
-
-
-/** query root */
-export type Query_RootShopping_List_CodesArgs = {
-  distinct_on?: Maybe<Array<Shopping_List_Codes_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Shopping_List_Codes_Order_By>>;
-  where?: Maybe<Shopping_List_Codes_Bool_Exp>;
-};
-
-
-/** query root */
-export type Query_RootShopping_List_Codes_AggregateArgs = {
-  distinct_on?: Maybe<Array<Shopping_List_Codes_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Shopping_List_Codes_Order_By>>;
-  where?: Maybe<Shopping_List_Codes_Bool_Exp>;
-};
-
-
-/** query root */
-export type Query_RootShopping_List_Codes_By_PkArgs = {
-  id: Scalars['uuid'];
 };
 
 
@@ -1194,162 +1387,17 @@ export type Shopping_List_Active_Users_Variance_Order_By = {
   id?: Maybe<Order_By>;
 };
 
-/** columns and relationships of "shopping_list_codes" */
-export type Shopping_List_Codes = {
-  __typename?: 'shopping_list_codes';
-  id: Scalars['uuid'];
-  /** An object relationship */
-  shopping_list: Shopping_Lists;
-  shopping_list_id: Scalars['uuid'];
-};
-
-/** aggregated selection of "shopping_list_codes" */
-export type Shopping_List_Codes_Aggregate = {
-  __typename?: 'shopping_list_codes_aggregate';
-  aggregate?: Maybe<Shopping_List_Codes_Aggregate_Fields>;
-  nodes: Array<Shopping_List_Codes>;
-};
-
-/** aggregate fields of "shopping_list_codes" */
-export type Shopping_List_Codes_Aggregate_Fields = {
-  __typename?: 'shopping_list_codes_aggregate_fields';
-  count?: Maybe<Scalars['Int']>;
-  max?: Maybe<Shopping_List_Codes_Max_Fields>;
-  min?: Maybe<Shopping_List_Codes_Min_Fields>;
-};
-
-
-/** aggregate fields of "shopping_list_codes" */
-export type Shopping_List_Codes_Aggregate_FieldsCountArgs = {
-  columns?: Maybe<Array<Shopping_List_Codes_Select_Column>>;
-  distinct?: Maybe<Scalars['Boolean']>;
-};
-
-/** order by aggregate values of table "shopping_list_codes" */
-export type Shopping_List_Codes_Aggregate_Order_By = {
-  count?: Maybe<Order_By>;
-  max?: Maybe<Shopping_List_Codes_Max_Order_By>;
-  min?: Maybe<Shopping_List_Codes_Min_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "shopping_list_codes" */
-export type Shopping_List_Codes_Arr_Rel_Insert_Input = {
-  data: Array<Shopping_List_Codes_Insert_Input>;
-  on_conflict?: Maybe<Shopping_List_Codes_On_Conflict>;
-};
-
-/** Boolean expression to filter rows from the table "shopping_list_codes". All fields are combined with a logical 'AND'. */
-export type Shopping_List_Codes_Bool_Exp = {
-  _and?: Maybe<Array<Maybe<Shopping_List_Codes_Bool_Exp>>>;
-  _not?: Maybe<Shopping_List_Codes_Bool_Exp>;
-  _or?: Maybe<Array<Maybe<Shopping_List_Codes_Bool_Exp>>>;
-  id?: Maybe<Uuid_Comparison_Exp>;
-  shopping_list?: Maybe<Shopping_Lists_Bool_Exp>;
-  shopping_list_id?: Maybe<Uuid_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "shopping_list_codes" */
-export enum Shopping_List_Codes_Constraint {
-  /** unique or primary key constraint */
-  ShoppingListCodesPkey = 'shopping_list_codes_pkey'
-}
-
-/** input type for inserting data into table "shopping_list_codes" */
-export type Shopping_List_Codes_Insert_Input = {
-  id?: Maybe<Scalars['uuid']>;
-  shopping_list?: Maybe<Shopping_Lists_Obj_Rel_Insert_Input>;
-  shopping_list_id?: Maybe<Scalars['uuid']>;
-};
-
-/** aggregate max on columns */
-export type Shopping_List_Codes_Max_Fields = {
-  __typename?: 'shopping_list_codes_max_fields';
-  id?: Maybe<Scalars['uuid']>;
-  shopping_list_id?: Maybe<Scalars['uuid']>;
-};
-
-/** order by max() on columns of table "shopping_list_codes" */
-export type Shopping_List_Codes_Max_Order_By = {
-  id?: Maybe<Order_By>;
-  shopping_list_id?: Maybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type Shopping_List_Codes_Min_Fields = {
-  __typename?: 'shopping_list_codes_min_fields';
-  id?: Maybe<Scalars['uuid']>;
-  shopping_list_id?: Maybe<Scalars['uuid']>;
-};
-
-/** order by min() on columns of table "shopping_list_codes" */
-export type Shopping_List_Codes_Min_Order_By = {
-  id?: Maybe<Order_By>;
-  shopping_list_id?: Maybe<Order_By>;
-};
-
-/** response of any mutation on the table "shopping_list_codes" */
-export type Shopping_List_Codes_Mutation_Response = {
-  __typename?: 'shopping_list_codes_mutation_response';
-  /** number of affected rows by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data of the affected rows by the mutation */
-  returning: Array<Shopping_List_Codes>;
-};
-
-/** input type for inserting object relation for remote table "shopping_list_codes" */
-export type Shopping_List_Codes_Obj_Rel_Insert_Input = {
-  data: Shopping_List_Codes_Insert_Input;
-  on_conflict?: Maybe<Shopping_List_Codes_On_Conflict>;
-};
-
-/** on conflict condition type for table "shopping_list_codes" */
-export type Shopping_List_Codes_On_Conflict = {
-  constraint: Shopping_List_Codes_Constraint;
-  update_columns: Array<Shopping_List_Codes_Update_Column>;
-  where?: Maybe<Shopping_List_Codes_Bool_Exp>;
-};
-
-/** ordering options when selecting data from "shopping_list_codes" */
-export type Shopping_List_Codes_Order_By = {
-  id?: Maybe<Order_By>;
-  shopping_list?: Maybe<Shopping_Lists_Order_By>;
-  shopping_list_id?: Maybe<Order_By>;
-};
-
-/** primary key columns input for table: "shopping_list_codes" */
-export type Shopping_List_Codes_Pk_Columns_Input = {
-  id: Scalars['uuid'];
-};
-
-/** select columns of table "shopping_list_codes" */
-export enum Shopping_List_Codes_Select_Column {
-  /** column name */
-  Id = 'id',
-  /** column name */
-  ShoppingListId = 'shopping_list_id'
-}
-
-/** input type for updating data in table "shopping_list_codes" */
-export type Shopping_List_Codes_Set_Input = {
-  id?: Maybe<Scalars['uuid']>;
-  shopping_list_id?: Maybe<Scalars['uuid']>;
-};
-
-/** update columns of table "shopping_list_codes" */
-export enum Shopping_List_Codes_Update_Column {
-  /** column name */
-  Id = 'id',
-  /** column name */
-  ShoppingListId = 'shopping_list_id'
-}
-
 /** columns and relationships of "shopping_list_items" */
 export type Shopping_List_Items = {
   __typename?: 'shopping_list_items';
+  /** An array relationship */
+  chat_messages: Array<Chat_Messages>;
+  /** An aggregated array relationship */
+  chat_messages_aggregate: Chat_Messages_Aggregate;
   created_at: Scalars['timestamptz'];
   created_by: Scalars['String'];
   /** An object relationship */
-  created_by_user: Users;
+  creator: Users;
   id: Scalars['uuid'];
   is_completed: Scalars['Boolean'];
   /** An object relationship */
@@ -1359,7 +1407,27 @@ export type Shopping_List_Items = {
   updated_at: Scalars['timestamptz'];
   updated_by: Scalars['String'];
   /** An object relationship */
-  updated_by_user: Users;
+  updator: Users;
+};
+
+
+/** columns and relationships of "shopping_list_items" */
+export type Shopping_List_ItemsChat_MessagesArgs = {
+  distinct_on?: Maybe<Array<Chat_Messages_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Chat_Messages_Order_By>>;
+  where?: Maybe<Chat_Messages_Bool_Exp>;
+};
+
+
+/** columns and relationships of "shopping_list_items" */
+export type Shopping_List_ItemsChat_Messages_AggregateArgs = {
+  distinct_on?: Maybe<Array<Chat_Messages_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Chat_Messages_Order_By>>;
+  where?: Maybe<Chat_Messages_Bool_Exp>;
 };
 
 /** aggregated selection of "shopping_list_items" */
@@ -1402,9 +1470,10 @@ export type Shopping_List_Items_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Shopping_List_Items_Bool_Exp>>>;
   _not?: Maybe<Shopping_List_Items_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Shopping_List_Items_Bool_Exp>>>;
+  chat_messages?: Maybe<Chat_Messages_Bool_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   created_by?: Maybe<String_Comparison_Exp>;
-  created_by_user?: Maybe<Users_Bool_Exp>;
+  creator?: Maybe<Users_Bool_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   is_completed?: Maybe<Boolean_Comparison_Exp>;
   shopping_list?: Maybe<Shopping_Lists_Bool_Exp>;
@@ -1412,7 +1481,7 @@ export type Shopping_List_Items_Bool_Exp = {
   title?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   updated_by?: Maybe<String_Comparison_Exp>;
-  updated_by_user?: Maybe<Users_Bool_Exp>;
+  updator?: Maybe<Users_Bool_Exp>;
 };
 
 /** unique or primary key constraints on table "shopping_list_items" */
@@ -1423,9 +1492,10 @@ export enum Shopping_List_Items_Constraint {
 
 /** input type for inserting data into table "shopping_list_items" */
 export type Shopping_List_Items_Insert_Input = {
+  chat_messages?: Maybe<Chat_Messages_Arr_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
   created_by?: Maybe<Scalars['String']>;
-  created_by_user?: Maybe<Users_Obj_Rel_Insert_Input>;
+  creator?: Maybe<Users_Obj_Rel_Insert_Input>;
   id?: Maybe<Scalars['uuid']>;
   is_completed?: Maybe<Scalars['Boolean']>;
   shopping_list?: Maybe<Shopping_Lists_Obj_Rel_Insert_Input>;
@@ -1433,7 +1503,7 @@ export type Shopping_List_Items_Insert_Input = {
   title?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   updated_by?: Maybe<Scalars['String']>;
-  updated_by_user?: Maybe<Users_Obj_Rel_Insert_Input>;
+  updator?: Maybe<Users_Obj_Rel_Insert_Input>;
 };
 
 /** aggregate max on columns */
@@ -1506,9 +1576,10 @@ export type Shopping_List_Items_On_Conflict = {
 
 /** ordering options when selecting data from "shopping_list_items" */
 export type Shopping_List_Items_Order_By = {
+  chat_messages_aggregate?: Maybe<Chat_Messages_Aggregate_Order_By>;
   created_at?: Maybe<Order_By>;
   created_by?: Maybe<Order_By>;
-  created_by_user?: Maybe<Users_Order_By>;
+  creator?: Maybe<Users_Order_By>;
   id?: Maybe<Order_By>;
   is_completed?: Maybe<Order_By>;
   shopping_list?: Maybe<Shopping_Lists_Order_By>;
@@ -1516,7 +1587,7 @@ export type Shopping_List_Items_Order_By = {
   title?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   updated_by?: Maybe<Order_By>;
-  updated_by_user?: Maybe<Users_Order_By>;
+  updator?: Maybe<Users_Order_By>;
 };
 
 /** primary key columns input for table: "shopping_list_items" */
@@ -1821,6 +1892,12 @@ export enum Shopping_Lists_Update_Column {
 /** subscription root */
 export type Subscription_Root = {
   __typename?: 'subscription_root';
+  /** fetch data from the table: "chat_messages" */
+  chat_messages: Array<Chat_Messages>;
+  /** fetch aggregated fields from the table: "chat_messages" */
+  chat_messages_aggregate: Chat_Messages_Aggregate;
+  /** fetch data from the table: "chat_messages" using primary key columns */
+  chat_messages_by_pk?: Maybe<Chat_Messages>;
   /** fetch data from the table: "current_user" */
   current_user: Array<Current_User>;
   /** fetch aggregated fields from the table: "current_user" */
@@ -1835,12 +1912,6 @@ export type Subscription_Root = {
   shopping_list_active_users_aggregate: Shopping_List_Active_Users_Aggregate;
   /** fetch data from the table: "shopping_list_active_users" using primary key columns */
   shopping_list_active_users_by_pk?: Maybe<Shopping_List_Active_Users>;
-  /** fetch data from the table: "shopping_list_codes" */
-  shopping_list_codes: Array<Shopping_List_Codes>;
-  /** fetch aggregated fields from the table: "shopping_list_codes" */
-  shopping_list_codes_aggregate: Shopping_List_Codes_Aggregate;
-  /** fetch data from the table: "shopping_list_codes" using primary key columns */
-  shopping_list_codes_by_pk?: Maybe<Shopping_List_Codes>;
   /** fetch data from the table: "shopping_list_items" */
   shopping_list_items: Array<Shopping_List_Items>;
   /** fetch aggregated fields from the table: "shopping_list_items" */
@@ -1859,6 +1930,32 @@ export type Subscription_Root = {
   users_aggregate: Users_Aggregate;
   /** fetch data from the table: "users" using primary key columns */
   users_by_pk?: Maybe<Users>;
+};
+
+
+/** subscription root */
+export type Subscription_RootChat_MessagesArgs = {
+  distinct_on?: Maybe<Array<Chat_Messages_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Chat_Messages_Order_By>>;
+  where?: Maybe<Chat_Messages_Bool_Exp>;
+};
+
+
+/** subscription root */
+export type Subscription_RootChat_Messages_AggregateArgs = {
+  distinct_on?: Maybe<Array<Chat_Messages_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Chat_Messages_Order_By>>;
+  where?: Maybe<Chat_Messages_Bool_Exp>;
+};
+
+
+/** subscription root */
+export type Subscription_RootChat_Messages_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -1925,32 +2022,6 @@ export type Subscription_RootShopping_List_Active_Users_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootShopping_List_Active_Users_By_PkArgs = {
   id: Scalars['Int'];
-};
-
-
-/** subscription root */
-export type Subscription_RootShopping_List_CodesArgs = {
-  distinct_on?: Maybe<Array<Shopping_List_Codes_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Shopping_List_Codes_Order_By>>;
-  where?: Maybe<Shopping_List_Codes_Bool_Exp>;
-};
-
-
-/** subscription root */
-export type Subscription_RootShopping_List_Codes_AggregateArgs = {
-  distinct_on?: Maybe<Array<Shopping_List_Codes_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Shopping_List_Codes_Order_By>>;
-  where?: Maybe<Shopping_List_Codes_Bool_Exp>;
-};
-
-
-/** subscription root */
-export type Subscription_RootShopping_List_Codes_By_PkArgs = {
-  id: Scalars['uuid'];
 };
 
 
@@ -2312,11 +2383,6 @@ export type ActiveUserDataFragment = (
   ) }
 );
 
-export type CreatorDataFragment = (
-  { __typename?: 'users' }
-  & Pick<Users, 'name' | 'public_id'>
-);
-
 export type CurrentUserDataFragment = (
   { __typename?: 'users' }
   & Pick<Users, 'name' | 'public_id'>
@@ -2356,7 +2422,7 @@ export type GetCreatedShoppingListsQuery = (
         { __typename?: 'shopping_lists' }
         & CreatedShoppingListsDataFragment
       )> }
-      & CreatorDataFragment
+      & UserDataFragment
     )> }
   )> }
 );
@@ -2383,6 +2449,19 @@ export type UpdateShoppingListMutationVariables = Exact<{
 export type UpdateShoppingListMutation = (
   { __typename?: 'mutation_root' }
   & { update_shopping_lists_by_pk?: Maybe<(
+    { __typename?: 'shopping_lists' }
+    & ShoppingListDataFragment
+  )> }
+);
+
+export type CreateShoppingListMutationVariables = Exact<{
+  title: Scalars['String'];
+}>;
+
+
+export type CreateShoppingListMutation = (
+  { __typename?: 'mutation_root' }
+  & { insert_shopping_lists_one?: Maybe<(
     { __typename?: 'shopping_lists' }
     & ShoppingListDataFragment
   )> }
@@ -2420,36 +2499,85 @@ export type ShoppingListDataFragment = (
   & Pick<Shopping_Lists, 'id' | 'updated_at' | 'created_at' | 'title'>
   & { creator: (
     { __typename?: 'users' }
-    & CreatorDataFragment
+    & UserDataFragment
   ), active_users: Array<(
     { __typename?: 'shopping_list_active_users' }
     & ActiveUserDataFragment
   )> }
 );
 
-export type ShoppingListItemDataFragment = (
-  { __typename?: 'shopping_list_items' }
-  & Pick<Shopping_List_Items, 'id' | 'created_at' | 'is_completed' | 'title' | 'updated_at'>
-  & { created_by_user: (
+export type UserDataFragment = (
+  { __typename?: 'users' }
+  & Pick<Users, 'name' | 'public_id'>
+);
+
+export type ChatMessageDataFragment = (
+  { __typename?: 'chat_messages' }
+  & Pick<Chat_Messages, 'created_at' | 'id' | 'message'>
+  & { creator: (
     { __typename?: 'users' }
-    & Pick<Users, 'name' | 'public_id'>
-  ), updated_by_user: (
-    { __typename?: 'users' }
-    & Pick<Users, 'name' | 'public_id'>
+    & UserDataFragment
   ) }
 );
 
-export type CreateShoppingListMutationVariables = Exact<{
-  title: Scalars['String'];
+export type GetChatMessagesQueryVariables = Exact<{
+  shopping_list_item_id: Scalars['uuid'];
 }>;
 
 
-export type CreateShoppingListMutation = (
-  { __typename?: 'mutation_root' }
-  & { insert_shopping_lists_one?: Maybe<(
-    { __typename?: 'shopping_lists' }
-    & ShoppingListDataFragment
+export type GetChatMessagesQuery = (
+  { __typename?: 'query_root' }
+  & { shopping_list_items_by_pk?: Maybe<(
+    { __typename?: 'shopping_list_items' }
+    & Pick<Shopping_List_Items, 'id'>
+    & { chat_messages: Array<(
+      { __typename?: 'chat_messages' }
+      & ChatMessageDataFragment
+    )> }
   )> }
+);
+
+export type SubscribeChatMessagesSubscriptionVariables = Exact<{
+  shopping_list_item_id: Scalars['uuid'];
+}>;
+
+
+export type SubscribeChatMessagesSubscription = (
+  { __typename?: 'subscription_root' }
+  & { shopping_list_items_by_pk?: Maybe<(
+    { __typename?: 'shopping_list_items' }
+    & Pick<Shopping_List_Items, 'id'>
+    & { chat_messages: Array<(
+      { __typename?: 'chat_messages' }
+      & ChatMessageDataFragment
+    )> }
+  )> }
+);
+
+export type CreateChatMessageMutationVariables = Exact<{
+  shopping_list_item_id: Scalars['uuid'];
+  message: Scalars['String'];
+}>;
+
+
+export type CreateChatMessageMutation = (
+  { __typename?: 'mutation_root' }
+  & { insert_chat_messages_one?: Maybe<(
+    { __typename?: 'chat_messages' }
+    & ChatMessageDataFragment
+  )> }
+);
+
+export type ShoppingListItemDataFragment = (
+  { __typename?: 'shopping_list_items' }
+  & Pick<Shopping_List_Items, 'id' | 'created_at' | 'is_completed' | 'title' | 'updated_at'>
+  & { creator: (
+    { __typename?: 'users' }
+    & Pick<Users, 'name' | 'public_id'>
+  ), updator: (
+    { __typename?: 'users' }
+    & Pick<Users, 'name' | 'public_id'>
+  ) }
 );
 
 export type GetShoppingListQueryVariables = Exact<{
@@ -2546,8 +2674,8 @@ export const CurrentUserDataFragmentDoc = gql`
   public_id
 }
     `;
-export const CreatorDataFragmentDoc = gql`
-    fragment CreatorData on users {
+export const UserDataFragmentDoc = gql`
+    fragment UserData on users {
   name
   public_id
 }
@@ -2567,13 +2695,13 @@ export const ShoppingListDataFragmentDoc = gql`
   created_at
   title
   creator {
-    ...CreatorData
+    ...UserData
   }
   active_users {
     ...ActiveUserData
   }
 }
-    ${CreatorDataFragmentDoc}
+    ${UserDataFragmentDoc}
 ${ActiveUserDataFragmentDoc}`;
 export const CreatedShoppingListsDataFragmentDoc = gql`
     fragment CreatedShoppingListsData on shopping_lists {
@@ -2587,18 +2715,28 @@ export const JoinedShoppingListsDataFragmentDoc = gql`
   }
 }
     ${ShoppingListDataFragmentDoc}`;
+export const ChatMessageDataFragmentDoc = gql`
+    fragment ChatMessageData on chat_messages {
+  created_at
+  creator {
+    ...UserData
+  }
+  id
+  message
+}
+    ${UserDataFragmentDoc}`;
 export const ShoppingListItemDataFragmentDoc = gql`
     fragment ShoppingListItemData on shopping_list_items {
   id
   created_at
-  created_by_user {
+  creator {
     name
     public_id
   }
   is_completed
   title
   updated_at
-  updated_by_user {
+  updator {
     name
     public_id
   }
@@ -2648,12 +2786,12 @@ export const GetCreatedShoppingListsDocument = gql`
       created_shopping_lists {
         ...CreatedShoppingListsData
       }
-      ...CreatorData
+      ...UserData
     }
   }
 }
     ${CreatedShoppingListsDataFragmentDoc}
-${CreatorDataFragmentDoc}`;
+${UserDataFragmentDoc}`;
 
 /**
  * __useGetCreatedShoppingListsQuery__
@@ -2744,6 +2882,38 @@ export function useUpdateShoppingListMutation(baseOptions?: ApolloReactHooks.Mut
 export type UpdateShoppingListMutationHookResult = ReturnType<typeof useUpdateShoppingListMutation>;
 export type UpdateShoppingListMutationResult = ApolloReactCommon.MutationResult<UpdateShoppingListMutation>;
 export type UpdateShoppingListMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateShoppingListMutation, UpdateShoppingListMutationVariables>;
+export const CreateShoppingListDocument = gql`
+    mutation createShoppingList($title: String!) {
+  insert_shopping_lists_one(object: {title: $title}) {
+    ...ShoppingListData
+  }
+}
+    ${ShoppingListDataFragmentDoc}`;
+export type CreateShoppingListMutationFn = ApolloReactCommon.MutationFunction<CreateShoppingListMutation, CreateShoppingListMutationVariables>;
+
+/**
+ * __useCreateShoppingListMutation__
+ *
+ * To run a mutation, you first call `useCreateShoppingListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateShoppingListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createShoppingListMutation, { data, loading, error }] = useCreateShoppingListMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useCreateShoppingListMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateShoppingListMutation, CreateShoppingListMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateShoppingListMutation, CreateShoppingListMutationVariables>(CreateShoppingListDocument, baseOptions);
+      }
+export type CreateShoppingListMutationHookResult = ReturnType<typeof useCreateShoppingListMutation>;
+export type CreateShoppingListMutationResult = ApolloReactCommon.MutationResult<CreateShoppingListMutation>;
+export type CreateShoppingListMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateShoppingListMutation, CreateShoppingListMutationVariables>;
 export const GetJoinedShoppingListsDocument = gql`
     query getJoinedShoppingLists {
   current_user {
@@ -2782,38 +2952,107 @@ export function useGetJoinedShoppingListsLazyQuery(baseOptions?: ApolloReactHook
 export type GetJoinedShoppingListsQueryHookResult = ReturnType<typeof useGetJoinedShoppingListsQuery>;
 export type GetJoinedShoppingListsLazyQueryHookResult = ReturnType<typeof useGetJoinedShoppingListsLazyQuery>;
 export type GetJoinedShoppingListsQueryResult = ApolloReactCommon.QueryResult<GetJoinedShoppingListsQuery, GetJoinedShoppingListsQueryVariables>;
-export const CreateShoppingListDocument = gql`
-    mutation createShoppingList($title: String!) {
-  insert_shopping_lists_one(object: {title: $title}) {
-    ...ShoppingListData
+export const GetChatMessagesDocument = gql`
+    query getChatMessages($shopping_list_item_id: uuid!) {
+  shopping_list_items_by_pk(id: $shopping_list_item_id) {
+    chat_messages(order_by: {created_at: asc}) {
+      ...ChatMessageData
+    }
+    id
   }
 }
-    ${ShoppingListDataFragmentDoc}`;
-export type CreateShoppingListMutationFn = ApolloReactCommon.MutationFunction<CreateShoppingListMutation, CreateShoppingListMutationVariables>;
+    ${ChatMessageDataFragmentDoc}`;
 
 /**
- * __useCreateShoppingListMutation__
+ * __useGetChatMessagesQuery__
  *
- * To run a mutation, you first call `useCreateShoppingListMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateShoppingListMutation` returns a tuple that includes:
+ * To run a query within a React component, call `useGetChatMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetChatMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetChatMessagesQuery({
+ *   variables: {
+ *      shopping_list_item_id: // value for 'shopping_list_item_id'
+ *   },
+ * });
+ */
+export function useGetChatMessagesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetChatMessagesQuery, GetChatMessagesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetChatMessagesQuery, GetChatMessagesQueryVariables>(GetChatMessagesDocument, baseOptions);
+      }
+export function useGetChatMessagesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetChatMessagesQuery, GetChatMessagesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetChatMessagesQuery, GetChatMessagesQueryVariables>(GetChatMessagesDocument, baseOptions);
+        }
+export type GetChatMessagesQueryHookResult = ReturnType<typeof useGetChatMessagesQuery>;
+export type GetChatMessagesLazyQueryHookResult = ReturnType<typeof useGetChatMessagesLazyQuery>;
+export type GetChatMessagesQueryResult = ApolloReactCommon.QueryResult<GetChatMessagesQuery, GetChatMessagesQueryVariables>;
+export const SubscribeChatMessagesDocument = gql`
+    subscription subscribeChatMessages($shopping_list_item_id: uuid!) {
+  shopping_list_items_by_pk(id: $shopping_list_item_id) {
+    chat_messages(order_by: {created_at: asc}) {
+      ...ChatMessageData
+    }
+    id
+  }
+}
+    ${ChatMessageDataFragmentDoc}`;
+
+/**
+ * __useSubscribeChatMessagesSubscription__
+ *
+ * To run a query within a React component, call `useSubscribeChatMessagesSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeChatMessagesSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSubscribeChatMessagesSubscription({
+ *   variables: {
+ *      shopping_list_item_id: // value for 'shopping_list_item_id'
+ *   },
+ * });
+ */
+export function useSubscribeChatMessagesSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<SubscribeChatMessagesSubscription, SubscribeChatMessagesSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<SubscribeChatMessagesSubscription, SubscribeChatMessagesSubscriptionVariables>(SubscribeChatMessagesDocument, baseOptions);
+      }
+export type SubscribeChatMessagesSubscriptionHookResult = ReturnType<typeof useSubscribeChatMessagesSubscription>;
+export type SubscribeChatMessagesSubscriptionResult = ApolloReactCommon.SubscriptionResult<SubscribeChatMessagesSubscription>;
+export const CreateChatMessageDocument = gql`
+    mutation createChatMessage($shopping_list_item_id: uuid!, $message: String!) {
+  insert_chat_messages_one(object: {shopping_list_item_id: $shopping_list_item_id, message: $message}) {
+    ...ChatMessageData
+  }
+}
+    ${ChatMessageDataFragmentDoc}`;
+export type CreateChatMessageMutationFn = ApolloReactCommon.MutationFunction<CreateChatMessageMutation, CreateChatMessageMutationVariables>;
+
+/**
+ * __useCreateChatMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateChatMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateChatMessageMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createShoppingListMutation, { data, loading, error }] = useCreateShoppingListMutation({
+ * const [createChatMessageMutation, { data, loading, error }] = useCreateChatMessageMutation({
  *   variables: {
- *      title: // value for 'title'
+ *      shopping_list_item_id: // value for 'shopping_list_item_id'
+ *      message: // value for 'message'
  *   },
  * });
  */
-export function useCreateShoppingListMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateShoppingListMutation, CreateShoppingListMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateShoppingListMutation, CreateShoppingListMutationVariables>(CreateShoppingListDocument, baseOptions);
+export function useCreateChatMessageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateChatMessageMutation, CreateChatMessageMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateChatMessageMutation, CreateChatMessageMutationVariables>(CreateChatMessageDocument, baseOptions);
       }
-export type CreateShoppingListMutationHookResult = ReturnType<typeof useCreateShoppingListMutation>;
-export type CreateShoppingListMutationResult = ApolloReactCommon.MutationResult<CreateShoppingListMutation>;
-export type CreateShoppingListMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateShoppingListMutation, CreateShoppingListMutationVariables>;
+export type CreateChatMessageMutationHookResult = ReturnType<typeof useCreateChatMessageMutation>;
+export type CreateChatMessageMutationResult = ApolloReactCommon.MutationResult<CreateChatMessageMutation>;
+export type CreateChatMessageMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateChatMessageMutation, CreateChatMessageMutationVariables>;
 export const GetShoppingListDocument = gql`
     query getShoppingList($id: uuid!) {
   shopping_lists_by_pk(id: $id) {
