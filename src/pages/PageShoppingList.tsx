@@ -131,11 +131,6 @@ const PageShoppingList = () => {
       }
     },
   });
-  const [onUpdate] = useUpdateShoppingListItemMutation();
-  const {
-    currentUser: { loading: currentUserLoading, data: currentUserData },
-  } = useGlobalContext();
-
   useEffect(() => {
     joinShoppingList({ variables: { id } });
     subscribeToMore({
@@ -144,9 +139,15 @@ const PageShoppingList = () => {
     });
   }, [id, joinShoppingList, subscribeToMore]);
 
+  const [onUpdate] = useUpdateShoppingListItemMutation();
+  const {
+    currentUser: { loading: currentUserLoading, data: currentUserData },
+  } = useGlobalContext();
+
   if (loading || currentUserLoading) {
     return <Loading />;
   }
+
   const shopping_list = data?.shopping_lists_by_pk;
   if (!shopping_list) {
     throw new ApolloDataNotFoundError({ shopping_list });
@@ -177,6 +178,7 @@ const PageShoppingList = () => {
             title,
             is_completed: false,
             updator: current_user,
+            chat_messages_aggregate: { aggregate: { count: 0 } },
           },
         },
       });

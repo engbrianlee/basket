@@ -2577,6 +2577,12 @@ export type ShoppingListItemDataFragment = (
   ), updator: (
     { __typename?: 'users' }
     & Pick<Users, 'name' | 'public_id'>
+  ), chat_messages_aggregate: (
+    { __typename?: 'chat_messages_aggregate' }
+    & { aggregate?: Maybe<(
+      { __typename?: 'chat_messages_aggregate_fields' }
+      & Pick<Chat_Messages_Aggregate_Fields, 'count'>
+    )> }
   ) }
 );
 
@@ -2739,6 +2745,11 @@ export const ShoppingListItemDataFragmentDoc = gql`
   updator {
     name
     public_id
+  }
+  chat_messages_aggregate {
+    aggregate {
+      count
+    }
   }
 }
     `;

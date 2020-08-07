@@ -15,6 +15,7 @@ import User from "./User";
 import produce from "immer";
 import _ from "lodash";
 import { formatISO } from "date-fns";
+import useGlobalContext from "../context";
 
 const fragment = gql`
   fragment CreatedShoppingListsData on shopping_lists {
@@ -53,32 +54,9 @@ const CreatedShoppingLists = () => {
       }
     },
   });
-
-  const onCreateNewShoppingListItem = (
-    e: React.FormEvent | React.FocusEvent
-  ) => {
-    e.preventDefault();
-    if (title !== "") {
-      const now = formatISO(new Date());
-      createShoppingList({
-        variables: { title },
-        optimisticResponse: {
-          insert_shopping_lists_one: {
-            __typename: "shopping_lists",
-            active_users: [],
-            created_at: now,
-            updated_at: now,
-            creator: { name: "Mock", public_id: "testId" },
-            id: uuidv4(),
-            title,
-          },
-        },
-      });
-    }
-
-    setTitle("");
-    setIsCreating(false);
-  };
+  const {
+    currentUser: { loading: currentUserLoading, data: currentUserData },
+  } = useGlobalContext();
 
   const [onDelete] = useDeleteShoppingListMutation({
     update: (cache, { data }) => {
@@ -109,7 +87,7 @@ const CreatedShoppingLists = () => {
   });
   const [onUpdate] = useUpdateShoppingListMutation();
 
-  if (loading) {
+  if (loading || currentUserLoading) {
     return <Loading />;
   }
   const created_shopping_lists =
@@ -118,6 +96,35 @@ const CreatedShoppingLists = () => {
   if (!created_shopping_lists) {
     throw new ApolloDataNotFoundError({ created_shopping_lists });
   }
+  const current_user = currentUserData?.current_user[0].user;
+  if (!current_user) {
+    throw new ApolloDataNotFoundError({ current_user });
+  }
+  const onCreateNewShoppingListItem = (
+    e: React.FormEvent | React.FocusEvent
+  ) => {
+    e.preventDefault();
+    if (title !== "") {
+      const now = formatISO(new Date());
+      createShoppingList({
+        variables: { title },
+        optimisticResponse: {
+          insert_shopping_lists_one: {
+            __typename: "shopping_lists",
+            active_users: [],
+            created_at: now,
+            updated_at: now,
+            creator: current_user,
+            id: uuidv4(),
+            title,
+          },
+        },
+      });
+    }
+
+    setTitle("");
+    setIsCreating(false);
+  };
 
   return (
     // /* https://stackoverflow.com/questions/21515042/scrolling-a-flexbox-with-overflowing-content */

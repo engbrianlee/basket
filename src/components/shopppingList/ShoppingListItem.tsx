@@ -39,6 +39,11 @@ const fragment = gql`
       name
       public_id
     }
+    chat_messages_aggregate {
+      aggregate {
+        count
+      }
+    }
   }
 `;
 
@@ -51,7 +56,7 @@ const ShoppingListItem = ({
     variables: { shopping_list_item_id: shoppingListItem.id },
   });
   const [showMenu, setShowMenu] = useState(false);
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(shoppingListItem.title);
   const prevIsEditing = usePrevious(isEditing);
@@ -301,7 +306,28 @@ const ShoppingListItem = ({
                   }}
                   className="flex items-center -space-x-2"
                 >
-                  chats
+                  {shoppingListItem.chat_messages_aggregate.aggregate
+                    ?.count && (
+                    <div className="relative">
+                      <svg
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        className="w-8 h-8 text-blue-500"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <div className="text-white absolute top-0 right-0 z-10 flex items-center justify-center w-4 h-4 -mt-0.5 -mr-0.5 text-sm font-medium bg-red-500 rounded-full">
+                        {
+                          shoppingListItem.chat_messages_aggregate.aggregate
+                            .count
+                        }
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
                 <motion.button
                   layout
@@ -331,7 +357,7 @@ const ShoppingListItem = ({
         </div>
       </motion.article>
       {showChat && (
-        <div className="px-8">
+        <div className="py-2 pl-8">
           <ChatMessages shopping_list_item_id={shoppingListItem.id} />
         </div>
       )}
