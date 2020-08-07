@@ -2329,6 +2329,7 @@ export type GetCurrentUserQuery = (
   { __typename?: 'query_root' }
   & { current_user: Array<(
     { __typename?: 'current_user' }
+    & Pick<Current_User, 'id'>
     & { user?: Maybe<(
       { __typename?: 'users' }
       & Pick<Users, 'name' | 'public_id'>
@@ -2402,6 +2403,7 @@ export type GetJoinedShoppingListsQuery = (
   { __typename?: 'query_root' }
   & { current_user: Array<(
     { __typename?: 'current_user' }
+    & Pick<Current_User, 'id'>
     & { user?: Maybe<(
       { __typename?: 'users' }
       & Pick<Users, 'public_id'>
@@ -2605,6 +2607,7 @@ export const ShoppingListItemDataFragmentDoc = gql`
 export const GetCurrentUserDocument = gql`
     query getCurrentUser {
   current_user {
+    id
     user {
       name
       public_id
@@ -2744,6 +2747,7 @@ export type UpdateShoppingListMutationOptions = ApolloReactCommon.BaseMutationOp
 export const GetJoinedShoppingListsDocument = gql`
     query getJoinedShoppingLists {
   current_user {
+    id
     user {
       public_id
       joined_shopping_lists {

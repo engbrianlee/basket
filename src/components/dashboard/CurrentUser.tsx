@@ -33,6 +33,7 @@ CurrentUser.fragment = fragment;
 const getCurrentUser = gql`
   query getCurrentUser {
     current_user {
+      id
       user {
         name
         public_id

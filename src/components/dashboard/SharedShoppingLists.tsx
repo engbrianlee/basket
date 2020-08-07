@@ -45,6 +45,7 @@ JoinedShoppingLists.fragment = fragment;
 const GET_JOINED_SHOPPING_LISTS = gql`
   query getJoinedShoppingLists {
     current_user {
+      id
       user {
         public_id
         joined_shopping_lists {
