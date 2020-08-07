@@ -4,11 +4,13 @@ import {
   InMemoryCache,
   split,
   NormalizedCacheObject,
+  from,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { RetryLink } from "@apollo/client/link/retry";
 import { getMainDefinition } from "@apollo/client/utilities";
+import loggerLink from "./apolloLoggerLink";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -18,11 +20,11 @@ const createApolloClient = (getAccessToken: () => Promise<string>) => {
     const httpLink = createHttpLink({
       uri: `https://${process.env.REACT_APP_GRAPHQL_HOST}`,
     });
-    const authLink = setContext(async (_, { headers }) => {
+    const authLink = setContext(async (request, { headers }) => {
       const accessToken = await getAccessToken();
-      console.count(
-        `Apollo httpLink: Getting accessToken, and sending request.`
-      );
+      // console.count(
+      //   `Apollo httpLink: Getting accessToken, and sending request.`
+      // );
       // return the headers to the context so httpLink can read them
       return {
         headers: {
@@ -64,7 +66,7 @@ const createApolloClient = (getAccessToken: () => Promise<string>) => {
     );
 
     apolloClient = new ApolloClient({
-      link: retryLink.concat(splitLink),
+      link: from([loggerLink, retryLink, splitLink]),
       cache: new InMemoryCache({
         typePolicies: {
           users: { keyFields: ["public_id"] },

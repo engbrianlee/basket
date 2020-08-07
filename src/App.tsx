@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { ApolloProvider } from "@apollo/client";
 import Pages from "./pages";
-import createApolloClient from "./lib/apolloClient";
+import createApolloClient from "./lib/apollo/apolloClient";
 import { Route, RouteProps, Switch } from "react-router";
 import Loading from "./components/Loading";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";

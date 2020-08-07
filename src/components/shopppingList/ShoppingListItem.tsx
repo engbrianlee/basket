@@ -61,6 +61,7 @@ const ShoppingListItem = ({
   const [editedTitle, setEditedTitle] = useState(
     startInEditing ? "" : shoppingListItem.title
   );
+  console.log(showChat);
   const prevIsEditing = usePrevious(isEditing);
 
   // Use three boolean to determine if person is clicking and not panning

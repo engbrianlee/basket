@@ -10,6 +10,7 @@ import {
   useGetJoinedShoppingListsLazyQuery,
   useCreateShoppingListMutation,
   GetCreatedShoppingListsQuery,
+  useGetCreatedShoppingListsLazyQuery,
 } from "../generated/graphql";
 import classNames from "classnames";
 import ShoppingList, {
@@ -71,9 +72,8 @@ TabLink.defaultProps = TabLinkDefaultProps;
 const PageDashboard = () => {
   let { path, url } = useRouteMatch();
   const isOwnedRoute = useRouteMatch({ path: `${url}/owned` });
-  // Created Shopping Lists is default route, we don't need to prefetch
-  // Pre fetch joined shopping lists
   const [getJoinedShoppingLists] = useGetJoinedShoppingListsLazyQuery();
+  const [getCreatedShoppingLists] = useGetCreatedShoppingListsLazyQuery();
 
   const [createShoppingList] = useCreateShoppingListMutation({
     update: (cache, { data }) => {
@@ -131,6 +131,7 @@ const PageDashboard = () => {
             activeClassName="text-white bg-blue-500"
             inActiveClassName="bg-white text-blue-500"
             to={`${url}/owned`}
+            onMouseOver={() => getCreatedShoppingLists()}
           >
             Owned
           </TabLink>

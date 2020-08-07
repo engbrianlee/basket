@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '../lib/apolloHooks';
+import * as ApolloReactHooks from '../lib/apollo/apolloHooks';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -200,6 +200,10 @@ export type Mutation_Root = {
   delete_shopping_list_active_users?: Maybe<Shopping_List_Active_Users_Mutation_Response>;
   /** delete single row from the table: "shopping_list_active_users" */
   delete_shopping_list_active_users_by_pk?: Maybe<Shopping_List_Active_Users>;
+  /** delete data from the table: "shopping_list_codes" */
+  delete_shopping_list_codes?: Maybe<Shopping_List_Codes_Mutation_Response>;
+  /** delete single row from the table: "shopping_list_codes" */
+  delete_shopping_list_codes_by_pk?: Maybe<Shopping_List_Codes>;
   /** delete data from the table: "shopping_list_items" */
   delete_shopping_list_items?: Maybe<Shopping_List_Items_Mutation_Response>;
   /** delete single row from the table: "shopping_list_items" */
@@ -224,6 +228,10 @@ export type Mutation_Root = {
   insert_shopping_list_active_users?: Maybe<Shopping_List_Active_Users_Mutation_Response>;
   /** insert a single row into the table: "shopping_list_active_users" */
   insert_shopping_list_active_users_one?: Maybe<Shopping_List_Active_Users>;
+  /** insert data into the table: "shopping_list_codes" */
+  insert_shopping_list_codes?: Maybe<Shopping_List_Codes_Mutation_Response>;
+  /** insert a single row into the table: "shopping_list_codes" */
+  insert_shopping_list_codes_one?: Maybe<Shopping_List_Codes>;
   /** insert data into the table: "shopping_list_items" */
   insert_shopping_list_items?: Maybe<Shopping_List_Items_Mutation_Response>;
   /** insert a single row into the table: "shopping_list_items" */
@@ -246,6 +254,10 @@ export type Mutation_Root = {
   update_shopping_list_active_users?: Maybe<Shopping_List_Active_Users_Mutation_Response>;
   /** update single row of the table: "shopping_list_active_users" */
   update_shopping_list_active_users_by_pk?: Maybe<Shopping_List_Active_Users>;
+  /** update data of the table: "shopping_list_codes" */
+  update_shopping_list_codes?: Maybe<Shopping_List_Codes_Mutation_Response>;
+  /** update single row of the table: "shopping_list_codes" */
+  update_shopping_list_codes_by_pk?: Maybe<Shopping_List_Codes>;
   /** update data of the table: "shopping_list_items" */
   update_shopping_list_items?: Maybe<Shopping_List_Items_Mutation_Response>;
   /** update single row of the table: "shopping_list_items" */
@@ -282,6 +294,18 @@ export type Mutation_RootDelete_Shopping_List_Active_UsersArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Shopping_List_Active_Users_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Shopping_List_CodesArgs = {
+  where: Shopping_List_Codes_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Shopping_List_Codes_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -360,6 +384,20 @@ export type Mutation_RootInsert_Shopping_List_Active_Users_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Shopping_List_CodesArgs = {
+  objects: Array<Shopping_List_Codes_Insert_Input>;
+  on_conflict?: Maybe<Shopping_List_Codes_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Shopping_List_Codes_OneArgs = {
+  object: Shopping_List_Codes_Insert_Input;
+  on_conflict?: Maybe<Shopping_List_Codes_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_Shopping_List_ItemsArgs = {
   objects: Array<Shopping_List_Items_Insert_Input>;
   on_conflict?: Maybe<Shopping_List_Items_On_Conflict>;
@@ -434,6 +472,20 @@ export type Mutation_RootUpdate_Shopping_List_Active_Users_By_PkArgs = {
   _inc?: Maybe<Shopping_List_Active_Users_Inc_Input>;
   _set?: Maybe<Shopping_List_Active_Users_Set_Input>;
   pk_columns: Shopping_List_Active_Users_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Shopping_List_CodesArgs = {
+  _set?: Maybe<Shopping_List_Codes_Set_Input>;
+  where: Shopping_List_Codes_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Shopping_List_Codes_By_PkArgs = {
+  _set?: Maybe<Shopping_List_Codes_Set_Input>;
+  pk_columns: Shopping_List_Codes_Pk_Columns_Input;
 };
 
 
@@ -627,6 +679,12 @@ export type Query_Root = {
   shopping_list_active_users_aggregate: Shopping_List_Active_Users_Aggregate;
   /** fetch data from the table: "shopping_list_active_users" using primary key columns */
   shopping_list_active_users_by_pk?: Maybe<Shopping_List_Active_Users>;
+  /** fetch data from the table: "shopping_list_codes" */
+  shopping_list_codes: Array<Shopping_List_Codes>;
+  /** fetch aggregated fields from the table: "shopping_list_codes" */
+  shopping_list_codes_aggregate: Shopping_List_Codes_Aggregate;
+  /** fetch data from the table: "shopping_list_codes" using primary key columns */
+  shopping_list_codes_by_pk?: Maybe<Shopping_List_Codes>;
   /** fetch data from the table: "shopping_list_items" */
   shopping_list_items: Array<Shopping_List_Items>;
   /** fetch aggregated fields from the table: "shopping_list_items" */
@@ -711,6 +769,32 @@ export type Query_RootShopping_List_Active_Users_AggregateArgs = {
 /** query root */
 export type Query_RootShopping_List_Active_Users_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+/** query root */
+export type Query_RootShopping_List_CodesArgs = {
+  distinct_on?: Maybe<Array<Shopping_List_Codes_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Shopping_List_Codes_Order_By>>;
+  where?: Maybe<Shopping_List_Codes_Bool_Exp>;
+};
+
+
+/** query root */
+export type Query_RootShopping_List_Codes_AggregateArgs = {
+  distinct_on?: Maybe<Array<Shopping_List_Codes_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Shopping_List_Codes_Order_By>>;
+  where?: Maybe<Shopping_List_Codes_Bool_Exp>;
+};
+
+
+/** query root */
+export type Query_RootShopping_List_Codes_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -1109,6 +1193,155 @@ export type Shopping_List_Active_Users_Variance_Fields = {
 export type Shopping_List_Active_Users_Variance_Order_By = {
   id?: Maybe<Order_By>;
 };
+
+/** columns and relationships of "shopping_list_codes" */
+export type Shopping_List_Codes = {
+  __typename?: 'shopping_list_codes';
+  id: Scalars['uuid'];
+  /** An object relationship */
+  shopping_list: Shopping_Lists;
+  shopping_list_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "shopping_list_codes" */
+export type Shopping_List_Codes_Aggregate = {
+  __typename?: 'shopping_list_codes_aggregate';
+  aggregate?: Maybe<Shopping_List_Codes_Aggregate_Fields>;
+  nodes: Array<Shopping_List_Codes>;
+};
+
+/** aggregate fields of "shopping_list_codes" */
+export type Shopping_List_Codes_Aggregate_Fields = {
+  __typename?: 'shopping_list_codes_aggregate_fields';
+  count?: Maybe<Scalars['Int']>;
+  max?: Maybe<Shopping_List_Codes_Max_Fields>;
+  min?: Maybe<Shopping_List_Codes_Min_Fields>;
+};
+
+
+/** aggregate fields of "shopping_list_codes" */
+export type Shopping_List_Codes_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Shopping_List_Codes_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "shopping_list_codes" */
+export type Shopping_List_Codes_Aggregate_Order_By = {
+  count?: Maybe<Order_By>;
+  max?: Maybe<Shopping_List_Codes_Max_Order_By>;
+  min?: Maybe<Shopping_List_Codes_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "shopping_list_codes" */
+export type Shopping_List_Codes_Arr_Rel_Insert_Input = {
+  data: Array<Shopping_List_Codes_Insert_Input>;
+  on_conflict?: Maybe<Shopping_List_Codes_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "shopping_list_codes". All fields are combined with a logical 'AND'. */
+export type Shopping_List_Codes_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Shopping_List_Codes_Bool_Exp>>>;
+  _not?: Maybe<Shopping_List_Codes_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Shopping_List_Codes_Bool_Exp>>>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  shopping_list?: Maybe<Shopping_Lists_Bool_Exp>;
+  shopping_list_id?: Maybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "shopping_list_codes" */
+export enum Shopping_List_Codes_Constraint {
+  /** unique or primary key constraint */
+  ShoppingListCodesPkey = 'shopping_list_codes_pkey'
+}
+
+/** input type for inserting data into table "shopping_list_codes" */
+export type Shopping_List_Codes_Insert_Input = {
+  id?: Maybe<Scalars['uuid']>;
+  shopping_list?: Maybe<Shopping_Lists_Obj_Rel_Insert_Input>;
+  shopping_list_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Shopping_List_Codes_Max_Fields = {
+  __typename?: 'shopping_list_codes_max_fields';
+  id?: Maybe<Scalars['uuid']>;
+  shopping_list_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "shopping_list_codes" */
+export type Shopping_List_Codes_Max_Order_By = {
+  id?: Maybe<Order_By>;
+  shopping_list_id?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Shopping_List_Codes_Min_Fields = {
+  __typename?: 'shopping_list_codes_min_fields';
+  id?: Maybe<Scalars['uuid']>;
+  shopping_list_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "shopping_list_codes" */
+export type Shopping_List_Codes_Min_Order_By = {
+  id?: Maybe<Order_By>;
+  shopping_list_id?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "shopping_list_codes" */
+export type Shopping_List_Codes_Mutation_Response = {
+  __typename?: 'shopping_list_codes_mutation_response';
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  returning: Array<Shopping_List_Codes>;
+};
+
+/** input type for inserting object relation for remote table "shopping_list_codes" */
+export type Shopping_List_Codes_Obj_Rel_Insert_Input = {
+  data: Shopping_List_Codes_Insert_Input;
+  on_conflict?: Maybe<Shopping_List_Codes_On_Conflict>;
+};
+
+/** on conflict condition type for table "shopping_list_codes" */
+export type Shopping_List_Codes_On_Conflict = {
+  constraint: Shopping_List_Codes_Constraint;
+  update_columns: Array<Shopping_List_Codes_Update_Column>;
+  where?: Maybe<Shopping_List_Codes_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "shopping_list_codes" */
+export type Shopping_List_Codes_Order_By = {
+  id?: Maybe<Order_By>;
+  shopping_list?: Maybe<Shopping_Lists_Order_By>;
+  shopping_list_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "shopping_list_codes" */
+export type Shopping_List_Codes_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "shopping_list_codes" */
+export enum Shopping_List_Codes_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ShoppingListId = 'shopping_list_id'
+}
+
+/** input type for updating data in table "shopping_list_codes" */
+export type Shopping_List_Codes_Set_Input = {
+  id?: Maybe<Scalars['uuid']>;
+  shopping_list_id?: Maybe<Scalars['uuid']>;
+};
+
+/** update columns of table "shopping_list_codes" */
+export enum Shopping_List_Codes_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ShoppingListId = 'shopping_list_id'
+}
 
 /** columns and relationships of "shopping_list_items" */
 export type Shopping_List_Items = {
@@ -1602,6 +1835,12 @@ export type Subscription_Root = {
   shopping_list_active_users_aggregate: Shopping_List_Active_Users_Aggregate;
   /** fetch data from the table: "shopping_list_active_users" using primary key columns */
   shopping_list_active_users_by_pk?: Maybe<Shopping_List_Active_Users>;
+  /** fetch data from the table: "shopping_list_codes" */
+  shopping_list_codes: Array<Shopping_List_Codes>;
+  /** fetch aggregated fields from the table: "shopping_list_codes" */
+  shopping_list_codes_aggregate: Shopping_List_Codes_Aggregate;
+  /** fetch data from the table: "shopping_list_codes" using primary key columns */
+  shopping_list_codes_by_pk?: Maybe<Shopping_List_Codes>;
   /** fetch data from the table: "shopping_list_items" */
   shopping_list_items: Array<Shopping_List_Items>;
   /** fetch aggregated fields from the table: "shopping_list_items" */
@@ -1686,6 +1925,32 @@ export type Subscription_RootShopping_List_Active_Users_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootShopping_List_Active_Users_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+/** subscription root */
+export type Subscription_RootShopping_List_CodesArgs = {
+  distinct_on?: Maybe<Array<Shopping_List_Codes_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Shopping_List_Codes_Order_By>>;
+  where?: Maybe<Shopping_List_Codes_Bool_Exp>;
+};
+
+
+/** subscription root */
+export type Subscription_RootShopping_List_Codes_AggregateArgs = {
+  distinct_on?: Maybe<Array<Shopping_List_Codes_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Shopping_List_Codes_Order_By>>;
+  where?: Maybe<Shopping_List_Codes_Bool_Exp>;
+};
+
+
+/** subscription root */
+export type Subscription_RootShopping_List_Codes_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
