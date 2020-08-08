@@ -128,9 +128,9 @@ const CreatedShoppingLists = () => {
 
   return (
     // /* https://stackoverflow.com/questions/21515042/scrolling-a-flexbox-with-overflowing-content */
-    <div className="flex flex-col items-center justify-between flex-1 flex-grow mt-4 overflow-auto">
+    <div className="flex flex-col items-center justify-between flex-1 flex-grow mt-4 overflow-auto rounded-lg">
       <div
-        className="flex w-full overflow-auto scrolling-auto"
+        className="flex w-full overflow-auto rounded-lg "
         style={{ minHeight: "min-content" }}
       >
         <div className="w-full space-y-2">
@@ -143,7 +143,7 @@ const CreatedShoppingLists = () => {
                 <input
                   autoFocus
                   type="text"
-                  className="w-full py-2 text-xl font-bold leading-none bg-transparent"
+                  className="w-full py-2 text-xl font-bold leading-none bg-transparent focus:outline-none"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />

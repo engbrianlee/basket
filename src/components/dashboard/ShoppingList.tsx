@@ -156,7 +156,7 @@ const ShoppingList = ({
             <input
               autoFocus
               type="text"
-              className="w-full text-xl font-bold leading-none bg-transparent py-2"
+              className="w-full text-xl font-bold leading-none bg-transparent focus:outline-none py-2"
               value={editedTitle}
               onChange={(e) => setEditedTitle(e.target.value)}
             />
