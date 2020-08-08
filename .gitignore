@@ -25,3 +25,4 @@ yarn-error.log*
 
 # tailwind output
 src/tailwind/tailwind.output.css
+.vercel
