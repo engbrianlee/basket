@@ -2,6 +2,7 @@ import React from "react";
 import { ShoppingListDataFragment } from "../../generated/graphql";
 import { formatDistanceToNow } from "date-fns";
 import { Link } from "react-router-dom";
+import copy from "copy-to-clipboard";
 
 export type ShoppingListHeaderProps = {
   title: ShoppingListDataFragment["title"];
@@ -35,11 +36,16 @@ const ShoppingListHeader = ({ title, updated_at }: ShoppingListHeaderProps) => {
             </time>
           </p>
         </div>
-        <div className="flex items-center justify-end flex-1 ml-auto">
+        <button
+          onClick={() => {
+            copy(window.location.href);
+          }}
+          className="flex items-center justify-end flex-1 ml-auto"
+        >
           <svg fill="currentColor" viewBox="0 0 20 20" className="w-8 h-8">
             <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path>
           </svg>
-        </div>
+        </button>
       </nav>
     </header>
   );

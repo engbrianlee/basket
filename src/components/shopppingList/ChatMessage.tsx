@@ -40,7 +40,10 @@ const ChatMessage = ({ chatMessage, currentUser }: ChatMessageProps) => {
       {chatMessage.creator.public_id !== currentUser.public_id && (
         <AvatarWithPlaceholderInitials
           initials={parseInitials(chatMessage.creator.name)}
-          className={classNames(AVATAR_COLORS[0], "text-sm text-white w-6 h-6")}
+          className={classNames(
+            AVATAR_COLORS[0],
+            "text-sm text-white w-6 h-6 self-end flex-shrink-0"
+          )}
         />
       )}
       <div

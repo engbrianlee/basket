@@ -133,6 +133,11 @@ const ShoppingListItem = ({
     }
   }, [isEditing, showMenu, prevIsEditing, editedTitle, onSubmit]);
 
+  const isChatMessages = Boolean(
+    shoppingListItem.chat_messages_aggregate.aggregate?.count &&
+      shoppingListItem.chat_messages_aggregate.aggregate.count > 0
+  );
+
   return (
     <div
       className="w-full px-3 overflow-hidden bg-gray-300 rounded-lg dark:text-gray-900"
@@ -291,19 +296,18 @@ const ShoppingListItem = ({
               </>
             ) : (
               <>
-                <motion.div
-                  key="avatars"
-                  initial={{ opacity: 0, x: "-100%" }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 3000,
-                    damping: 200,
-                  }}
-                  className="flex items-center -space-x-2"
-                >
-                  {shoppingListItem.chat_messages_aggregate.aggregate
-                    ?.count && (
+                {isChatMessages && (
+                  <motion.div
+                    key="avatars"
+                    initial={{ opacity: 0, x: "-100%" }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 3000,
+                      damping: 200,
+                    }}
+                    className="flex items-center -space-x-2"
+                  >
                     <div className="relative">
                       <svg
                         fill="currentColor"
@@ -317,14 +321,14 @@ const ShoppingListItem = ({
                         />
                       </svg>
                       <div className="text-white absolute top-0 right-0 z-10 flex items-center justify-center w-4 h-4 -mt-0.5 -mr-0.5 text-sm font-medium bg-red-500 rounded-full">
-                        {
+                        {shoppingListItem.chat_messages_aggregate.aggregate
+                          ?.count &&
                           shoppingListItem.chat_messages_aggregate.aggregate
-                            .count
-                        }
+                            .count}
                       </div>
                     </div>
-                  )}
-                </motion.div>
+                  </motion.div>
+                )}
                 <motion.button
                   layout
                   transition={{
