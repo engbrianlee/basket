@@ -16,7 +16,9 @@ let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const createApolloClient = (getAccessToken: () => Promise<string>) => {
   if (!apolloClient) {
-    console.count("Creating Apollo Client");
+    if (process.env.NODE_ENV !== "production") {
+      console.count("Creating Apollo Client");
+    }
     const httpLink = createHttpLink({
       uri: `https://${process.env.REACT_APP_GRAPHQL_HOST}`,
     });
@@ -41,7 +43,9 @@ const createApolloClient = (getAccessToken: () => Promise<string>) => {
         reconnect: true,
         connectionParams: async () => {
           const accessToken = await getAccessToken();
-          console.count(`Apollo wsLink: Getting accessToken: ${accessToken}`);
+          if (process.env.NODE_ENV !== "production") {
+            console.count(`Apollo wsLink: Getting accessToken: ${accessToken}`);
+          }
           return {
             headers: {
               Authorization: accessToken ? `Bearer ${accessToken}` : "",
@@ -66,7 +70,10 @@ const createApolloClient = (getAccessToken: () => Promise<string>) => {
     );
 
     apolloClient = new ApolloClient({
-      link: from([loggerLink, retryLink, splitLink]),
+      link:
+        process.env.NODE_ENV === "production"
+          ? from([retryLink, splitLink])
+          : from([loggerLink, retryLink, splitLink]),
       cache: new InMemoryCache({
         typePolicies: {
           users: { keyFields: ["public_id"] },
