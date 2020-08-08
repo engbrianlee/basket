@@ -23,7 +23,9 @@ const ShoppingListHeader = ({ title, updated_at }: ShoppingListHeaderProps) => {
           </Link>
         </div>
         <div className="truncate">
-          <h1 className="text-3xl font-bold leading-none truncate">{title}</h1>
+          <h1 className="text-3xl font-bold leading-none text-center truncate">
+            {title}
+          </h1>
           <p className="text-sm font-light leading-none text-center text-gray-300 truncate">
             modified{" "}
             <time dateTime={updated_at}>

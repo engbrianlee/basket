@@ -3,10 +3,14 @@ import { gql } from "@apollo/client";
 import {
   useGetJoinedShoppingListsQuery,
   useUpdateShoppingListMutation,
+  useLeaveShoppingListMutation,
+  GetJoinedShoppingListsQuery,
 } from "../../generated/graphql";
 import Loading from "../Loading";
 import ShoppingList from "./ShoppingList";
 import { ApolloDataNotFoundError } from "../../lib/error";
+import produce from "immer";
+import _ from "lodash";
 
 const fragment = gql`
   fragment JoinedShoppingListsData on shopping_list_active_users {
@@ -20,6 +24,37 @@ const fragment = gql`
 const JoinedShoppingLists = () => {
   const { loading, data } = useGetJoinedShoppingListsQuery();
   const [onUpdate] = useUpdateShoppingListMutation();
+  const [onDelete] = useLeaveShoppingListMutation({
+    update: (cache, { data }) => {
+      const query = GET_JOINED_SHOPPING_LISTS;
+      const cachedData = cache.readQuery<GetJoinedShoppingListsQuery>({
+        query,
+      });
+      const newData = produce(cachedData, (t) => {
+        const delete_shopping_list_active_users =
+          data?.delete_shopping_list_active_users;
+        if (!delete_shopping_list_active_users) {
+          throw new ApolloDataNotFoundError({
+            delete_shopping_list_active_users,
+          });
+        }
+        if (t?.current_user[0].user?.joined_shopping_lists) {
+          _.remove(
+            t?.current_user[0].user.joined_shopping_lists,
+            (joined_shopping_lists) =>
+              joined_shopping_lists.shopping_list.id ===
+              delete_shopping_list_active_users.returning[0].shopping_list.id
+          );
+        }
+      });
+      if (newData) {
+        cache.writeQuery<GetJoinedShoppingListsQuery>({
+          query,
+          data: newData,
+        });
+      }
+    },
+  });
   if (loading) {
     return <Loading />;
   }
@@ -41,6 +76,8 @@ const JoinedShoppingLists = () => {
               key={shoppingList.id}
               shoppingList={shoppingList}
               onUpdate={onUpdate}
+              onDelete={onDelete}
+              deleteButtonText="Leave"
             />
           ))}
         </div>
@@ -63,6 +100,20 @@ const GET_JOINED_SHOPPING_LISTS = gql`
   }
   ${JoinedShoppingLists.fragment}
 `;
-export { GET_JOINED_SHOPPING_LISTS };
+
+const LEAVE_SHOPPING_LIST = gql`
+  mutation leaveShoppingList($id: uuid!) {
+    delete_shopping_list_active_users(
+      where: { shopping_list: { id: { _eq: $id } } }
+    ) {
+      returning {
+        shopping_list {
+          id
+        }
+      }
+    }
+  }
+`;
+export { GET_JOINED_SHOPPING_LISTS, LEAVE_SHOPPING_LIST };
 
 export default JoinedShoppingLists;

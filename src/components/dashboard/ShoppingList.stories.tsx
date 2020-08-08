@@ -64,6 +64,3 @@ export const actionsData = {
 export const Default = () => (
   <ShoppingList shoppingList={taskData} {...actionsData} />
 );
-export const CantDelete = () => (
-  <ShoppingList shoppingList={taskData} canDelete={false} {...actionsData} />
-);

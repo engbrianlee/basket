@@ -21,11 +21,11 @@ import { useHistory } from "react-router-dom";
 
 type ShoppingListProps = {
   shoppingList: ShoppingListDataFragment;
-  onDelete?: DeleteShoppingListMutationFn | HandlerFunction;
+  onDelete: DeleteShoppingListMutationFn | HandlerFunction;
   onUpdate: UpdateShoppingListMutationFn | HandlerFunction;
 } & typeof shoppingListDefaultProps;
 const shoppingListDefaultProps = {
-  canDelete: true,
+  deleteButtonText: "Delete",
 };
 
 const fragment = gql`
@@ -47,9 +47,9 @@ const fragment = gql`
 
 const ShoppingList = ({
   shoppingList,
-  canDelete,
   onDelete,
   onUpdate,
+  deleteButtonText,
 }: ShoppingListProps) => {
   const history = useHistory();
   const [showMenu, setShowMenu] = useState(false);
@@ -156,7 +156,7 @@ const ShoppingList = ({
             <input
               autoFocus
               type="text"
-              className="w-full text-xl font-bold leading-none form-input"
+              className="w-full text-xl font-bold leading-none bg-transparent py-2"
               value={editedTitle}
               onChange={(e) => setEditedTitle(e.target.value)}
             />
@@ -238,7 +238,7 @@ const ShoppingList = ({
                     </div>
                   </button>
                 )}
-                {canDelete && onDelete && (
+                {
                   <button
                     className="h-full"
                     onClick={() =>
@@ -253,10 +253,10 @@ const ShoppingList = ({
                     }
                   >
                     <div className="flex items-center justify-center h-full px-2 font-semibold text-white bg-red-600 w-18">
-                      Delete
+                      {deleteButtonText}
                     </div>
                   </button>
-                )}
+                }
               </motion.div>
             </>
           ) : (

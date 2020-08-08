@@ -246,7 +246,7 @@ const PageShoppingList = () => {
                     <input
                       autoFocus
                       type="text"
-                      className="w-full text-xl font-bold leading-none form-input"
+                      className="w-full text-xl font-bold leading-none bg-transparent py-2"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                     />

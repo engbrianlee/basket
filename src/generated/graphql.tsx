@@ -2119,6 +2119,10 @@ export type Timestamptz_Comparison_Exp = {
 /** columns and relationships of "users" */
 export type Users = {
   __typename?: 'users';
+  /** An array relationship */
+  chat_messages: Array<Chat_Messages>;
+  /** An aggregated array relationship */
+  chat_messages_aggregate: Chat_Messages_Aggregate;
   created_at: Scalars['timestamptz'];
   /** An array relationship */
   created_shopping_lists: Array<Shopping_Lists>;
@@ -2135,6 +2139,26 @@ export type Users = {
   private_user_data?: Maybe<Private_User_Data>;
   /** A public id. This is mainly for caching of data. We could also use it for invite codes. */
   public_id: Scalars['uuid'];
+};
+
+
+/** columns and relationships of "users" */
+export type UsersChat_MessagesArgs = {
+  distinct_on?: Maybe<Array<Chat_Messages_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Chat_Messages_Order_By>>;
+  where?: Maybe<Chat_Messages_Bool_Exp>;
+};
+
+
+/** columns and relationships of "users" */
+export type UsersChat_Messages_AggregateArgs = {
+  distinct_on?: Maybe<Array<Chat_Messages_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Chat_Messages_Order_By>>;
+  where?: Maybe<Chat_Messages_Bool_Exp>;
 };
 
 
@@ -2217,6 +2241,7 @@ export type Users_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Users_Bool_Exp>>>;
   _not?: Maybe<Users_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Users_Bool_Exp>>>;
+  chat_messages?: Maybe<Chat_Messages_Bool_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   created_shopping_lists?: Maybe<Shopping_Lists_Bool_Exp>;
   email?: Maybe<String_Comparison_Exp>;
@@ -2237,6 +2262,7 @@ export enum Users_Constraint {
 
 /** input type for inserting data into table "users" */
 export type Users_Insert_Input = {
+  chat_messages?: Maybe<Chat_Messages_Arr_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
   created_shopping_lists?: Maybe<Shopping_Lists_Arr_Rel_Insert_Input>;
   email?: Maybe<Scalars['String']>;
@@ -2309,6 +2335,7 @@ export type Users_On_Conflict = {
 
 /** ordering options when selecting data from "users" */
 export type Users_Order_By = {
+  chat_messages_aggregate?: Maybe<Chat_Messages_Aggregate_Order_By>;
   created_at?: Maybe<Order_By>;
   created_shopping_lists_aggregate?: Maybe<Shopping_Lists_Aggregate_Order_By>;
   email?: Maybe<Order_By>;
@@ -2490,6 +2517,25 @@ export type GetJoinedShoppingListsQuery = (
         { __typename?: 'shopping_list_active_users' }
         & JoinedShoppingListsDataFragment
       )> }
+    )> }
+  )> }
+);
+
+export type LeaveShoppingListMutationVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type LeaveShoppingListMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_shopping_list_active_users?: Maybe<(
+    { __typename?: 'shopping_list_active_users_mutation_response' }
+    & { returning: Array<(
+      { __typename?: 'shopping_list_active_users' }
+      & { shopping_list: (
+        { __typename?: 'shopping_lists' }
+        & Pick<Shopping_Lists, 'id'>
+      ) }
     )> }
   )> }
 );
@@ -2963,6 +3009,42 @@ export function useGetJoinedShoppingListsLazyQuery(baseOptions?: ApolloReactHook
 export type GetJoinedShoppingListsQueryHookResult = ReturnType<typeof useGetJoinedShoppingListsQuery>;
 export type GetJoinedShoppingListsLazyQueryHookResult = ReturnType<typeof useGetJoinedShoppingListsLazyQuery>;
 export type GetJoinedShoppingListsQueryResult = ApolloReactCommon.QueryResult<GetJoinedShoppingListsQuery, GetJoinedShoppingListsQueryVariables>;
+export const LeaveShoppingListDocument = gql`
+    mutation leaveShoppingList($id: uuid!) {
+  delete_shopping_list_active_users(where: {shopping_list: {id: {_eq: $id}}}) {
+    returning {
+      shopping_list {
+        id
+      }
+    }
+  }
+}
+    `;
+export type LeaveShoppingListMutationFn = ApolloReactCommon.MutationFunction<LeaveShoppingListMutation, LeaveShoppingListMutationVariables>;
+
+/**
+ * __useLeaveShoppingListMutation__
+ *
+ * To run a mutation, you first call `useLeaveShoppingListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLeaveShoppingListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [leaveShoppingListMutation, { data, loading, error }] = useLeaveShoppingListMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useLeaveShoppingListMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LeaveShoppingListMutation, LeaveShoppingListMutationVariables>) {
+        return ApolloReactHooks.useMutation<LeaveShoppingListMutation, LeaveShoppingListMutationVariables>(LeaveShoppingListDocument, baseOptions);
+      }
+export type LeaveShoppingListMutationHookResult = ReturnType<typeof useLeaveShoppingListMutation>;
+export type LeaveShoppingListMutationResult = ApolloReactCommon.MutationResult<LeaveShoppingListMutation>;
+export type LeaveShoppingListMutationOptions = ApolloReactCommon.BaseMutationOptions<LeaveShoppingListMutation, LeaveShoppingListMutationVariables>;
 export const GetChatMessagesDocument = gql`
     query getChatMessages($shopping_list_item_id: uuid!) {
   shopping_list_items_by_pk(id: $shopping_list_item_id) {

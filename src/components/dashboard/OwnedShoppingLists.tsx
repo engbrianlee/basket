@@ -143,7 +143,7 @@ const CreatedShoppingLists = () => {
                 <input
                   autoFocus
                   type="text"
-                  className="w-full text-xl font-bold leading-none form-input"
+                  className="w-full py-2 text-xl font-bold leading-none bg-transparent"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />

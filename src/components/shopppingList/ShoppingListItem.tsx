@@ -166,7 +166,7 @@ const ShoppingListItem = ({
               <input
                 autoFocus
                 type="text"
-                className="w-full text-xl font-bold leading-none form-input"
+                className="w-full py-2 text-xl font-bold leading-none bg-transparent"
                 value={editedTitle}
                 onChange={(e) => setEditedTitle(e.target.value)}
               />
@@ -183,11 +183,7 @@ const ShoppingListItem = ({
                 }}
               />
 
-              <motion.div
-                layout="position"
-                onDoubleClick={() => setIsEditing(true)}
-                className="truncate"
-              >
+              <motion.div layout="position" className="truncate">
                 <h2 className="text-xl font-bold truncate">
                   {shoppingListItem.title}
                 </h2>
