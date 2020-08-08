@@ -56,7 +56,7 @@ const ShoppingListItem = ({
     variables: { shopping_list_item_id: shoppingListItem.id },
   });
   const [showMenu, setShowMenu] = useState(false);
-  const [showChat, setShowChat] = useState(true);
+  const [showChat, setShowChat] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(shoppingListItem.title);
   const prevIsEditing = usePrevious(isEditing);

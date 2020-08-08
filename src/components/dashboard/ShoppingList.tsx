@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import _ from "lodash";
 import {
   ShoppingListDataFragment,
   DeleteShoppingListMutationFn,
   UpdateShoppingListMutationFn,
+  LeaveShoppingListMutationFn,
+  GetJoinedShoppingListsQuery,
 } from "../../generated/graphql";
 import { formatDistanceToNow } from "date-fns";
 import classNames from "classnames";
@@ -18,10 +21,14 @@ import AvatarWithPlaceholderInitials, {
 } from "../Avatar";
 import { usePrevious } from "../../hooks/utils";
 import { useHistory } from "react-router-dom";
+import produce from "immer";
+import { ApolloDataNotFoundError } from "../../lib/error";
+import { GET_JOINED_SHOPPING_LISTS } from "./SharedShoppingLists";
 
 type ShoppingListProps = {
   shoppingList: ShoppingListDataFragment;
-  onDelete: DeleteShoppingListMutationFn | HandlerFunction;
+  onDelete?: DeleteShoppingListMutationFn | HandlerFunction;
+  onLeave?: LeaveShoppingListMutationFn | HandlerFunction;
   onUpdate: UpdateShoppingListMutationFn | HandlerFunction;
 } & typeof shoppingListDefaultProps;
 const shoppingListDefaultProps = {
@@ -49,6 +56,7 @@ const ShoppingList = ({
   shoppingList,
   onDelete,
   onUpdate,
+  onLeave,
   deleteButtonText,
 }: ShoppingListProps) => {
   const history = useHistory();
@@ -156,7 +164,7 @@ const ShoppingList = ({
             <input
               autoFocus
               type="text"
-              className="w-full text-xl font-bold leading-none bg-transparent focus:outline-none py-2"
+              className="w-full py-2 text-xl font-bold leading-none bg-transparent focus:outline-none"
               value={editedTitle}
               onChange={(e) => setEditedTitle(e.target.value)}
             />
@@ -241,16 +249,60 @@ const ShoppingList = ({
                 {
                   <button
                     className="h-full"
-                    onClick={() =>
-                      onDelete({
-                        variables: { id: shoppingList.id },
-                        optimisticResponse: {
-                          delete_shopping_lists_by_pk: {
-                            id: shoppingList.id,
+                    onClick={() => {
+                      if (onDelete) {
+                        onDelete({
+                          variables: { id: shoppingList.id },
+                          optimisticResponse: {
+                            delete_shopping_lists_by_pk: {
+                              id: shoppingList.id,
+                            },
                           },
-                        },
-                      })
-                    }
+                        });
+                      } else if (onLeave) {
+                        onLeave({
+                          variables: { id: shoppingList.id },
+                          optimisticResponse: {
+                            delete_shopping_list_active_users: {
+                              affected_rows: 1,
+                            },
+                          },
+                          update: (cache, { data }) => {
+                            const query = GET_JOINED_SHOPPING_LISTS;
+                            const cachedData = cache.readQuery<
+                              GetJoinedShoppingListsQuery
+                            >({
+                              query,
+                            });
+                            const newData = produce(cachedData, (t) => {
+                              const delete_shopping_list_active_users =
+                                data?.delete_shopping_list_active_users;
+                              if (!delete_shopping_list_active_users) {
+                                throw new ApolloDataNotFoundError({
+                                  delete_shopping_list_active_users,
+                                });
+                              }
+                              if (
+                                t?.current_user[0].user?.joined_shopping_lists
+                              ) {
+                                _.remove(
+                                  t?.current_user[0].user.joined_shopping_lists,
+                                  (joined_shopping_lists) =>
+                                    joined_shopping_lists.shopping_list.id ===
+                                    shoppingList.id
+                                );
+                              }
+                            });
+                            if (newData) {
+                              cache.writeQuery<GetJoinedShoppingListsQuery>({
+                                query,
+                                data: newData,
+                              });
+                            }
+                          },
+                        });
+                      }
+                    }}
                   >
                     <div className="flex items-center justify-center h-full px-2 font-semibold text-white bg-red-600 w-18">
                       {deleteButtonText}

@@ -1,4 +1,3 @@
-import { animateScroll as scroll } from "react-scroll";
 import { v4 as uuidv4 } from "uuid";
 import React, { useState, DOMAttributes, useEffect } from "react";
 import { gql } from "@apollo/client";
@@ -65,10 +64,6 @@ const ChatMessages = ({ shopping_list_item_id }: ChatMessagesProps) => {
   const {
     currentUser: { loading: currentUserLoading, data: currentUserData },
   } = useGlobalContext();
-
-  useEffect(() => {
-    scroll.scrollToBottom();
-  }, [data]);
 
   if (loading || currentUserLoading) {
     return <Loading />;

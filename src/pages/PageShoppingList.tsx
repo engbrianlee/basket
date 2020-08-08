@@ -9,10 +9,10 @@ import {
   useJoinShoppingListMutation,
   useDeleteShoppingListItemMutation,
   useUpdateShoppingListItemMutation,
-  useGetShoppingListQuery,
   useCreateShoppingListItemMutation,
   ShoppingListItemDataFragment,
   GetShoppingListQuery,
+  useGetShoppingListLazyQuery,
 } from "../generated/graphql";
 import Loading from "../components/Loading";
 import { ApolloDataNotFoundError } from "../lib/error";
@@ -67,10 +67,25 @@ const PageShoppingList = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [title, setTitle] = useState("");
 
-  const { data, loading, subscribeToMore } = useGetShoppingListQuery({
+  const [
+    getShoppingList,
+    { data, loading, subscribeToMore, called },
+  ] = useGetShoppingListLazyQuery({
     variables: { id },
   });
-  const [joinShoppingList] = useJoinShoppingListMutation();
+  const [joinShoppingList] = useJoinShoppingListMutation({
+    onCompleted: () => {
+      getShoppingList();
+    },
+  });
+  useEffect(() => {
+    if (called && subscribeToMore) {
+      subscribeToMore({
+        variables: { id },
+        document: SUBSCRIBE_SHOPPING_LIST,
+      });
+    }
+  }, [called, id, subscribeToMore]);
   const [createShoppingListItem] = useCreateShoppingListItemMutation({
     update: (cache, { data }) => {
       const query = GET_SHOPPING_LIST;
@@ -133,18 +148,14 @@ const PageShoppingList = () => {
   });
   useEffect(() => {
     joinShoppingList({ variables: { id } });
-    subscribeToMore({
-      variables: { id },
-      document: SUBSCRIBE_SHOPPING_LIST,
-    });
-  }, [id, joinShoppingList, subscribeToMore]);
+  }, [id, joinShoppingList]);
 
   const [onUpdate] = useUpdateShoppingListItemMutation();
   const {
     currentUser: { loading: currentUserLoading, data: currentUserData },
   } = useGlobalContext();
 
-  if (loading || currentUserLoading) {
+  if (loading || !called || currentUserLoading) {
     return <Loading />;
   }
 
