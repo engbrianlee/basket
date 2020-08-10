@@ -17,13 +17,13 @@
 
 > Basket is a realtime, collaborative shopping list that helps groups of people organize their shopping runs.
 
-_Imagine this scenario_: you're planning a grocery store run to get some items. You ask your family members what they want and hordes of text messages hit your inbox. You arrive at the store and open whatever chat app your family members used for their requests and start mentally checking off items until you inevitably hit a roadblock - they are out of stock of a certain item.
+_Imagine this scenario_: you're planning a grocery store run to get some items. You ask your family members what they want and hordes of text messages hit your inbox. You arrive at the store and open whatever chat app your family members used for their requests and start mentally checking off items until you inevitably hit a roadblock - you can't find a certain item 😱!
 
 You text back, asking if "x" brand is a suitable replacement and get into a discussion. Images are sent, more text messages flood your inbox, and by the end of the ordeal, your chat log is a jumbled mess of images and text. But you're still not done! That was just a single item, time to wade through this jumbled mess to find out the next item to complete.
 
 ---
 
-Basket allows you to organize this jumbled mess by **providing structure to how you communicate about your shopping list.**
+Basket alleviates this issue by **providing structure to how you communicate about your shopping list.**
 
 <div align="center">
 <img src="docs/assets/overview.gif" width="333" height="666" />
