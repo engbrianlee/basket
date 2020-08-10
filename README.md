@@ -66,6 +66,10 @@ After an initial project ideation and planning phase, I was able to develop the 
 
 - **Auth0**: Authentication
 
+### Testing
+- **Storybook**: Component testing
+- **Cypress.io**: For E2E & Integration testing
+
 ## Conclusion & Disclaimer
 
 > Disclaimer: Do not use this app to store any sensitive information; it is for DEMO purposes only.
@@ -76,4 +80,5 @@ There are still a lot of core features to complete:
 
 - Push Notifications
 - Better UX/UI for realtime capabilities
+- Better testing
 - [Many, many more](https://github.com/engbrianlee/basket/issues)
