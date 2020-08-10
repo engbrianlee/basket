@@ -13,10 +13,6 @@
   </p>
 </p>
 
-<div align="center">
-<img src="docs/assets/card.jpg"/>
-</div>
-
 ## What is it?
 
 > Basket is a realtime, collaborative shopping list that helps groups of people organize their shopping runs.
