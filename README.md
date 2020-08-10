@@ -1,68 +1,83 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p align="center">
+  <h3 align="center"><img src="docs/assets/logo.svg" height="75"></h3>
 
-## Available Scripts
+  <p align="center">
+    Basket: A realtime, collaborative shopping list
+    <br>
+    <a href="https://basket-ebl.vercel.app/"><strong>Demo »</strong></a>
+    <br>
+    <br>
+    <a href="https://blog.engbrianlee.vercel.app/basket-a-real-time-collaborative-shopping-list">Blog Post</a>
+    &bull;
+    <a href="LICENSE.md">License (MIT)</a>
+  </p>
+</p>
 
-In the project directory, you can run:
+<div align="center">
+<img src="docs/assets/card.jpg"/>
+</div>
 
-### `yarn start`
+## What is it?
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> Basket is a realtime, collaborative shopping list that helps groups of people organize their shopping runs.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+_Imagine this scenario_: you're planning a grocery store run to get some items. You ask your family members what they want and hordes of text messages hit your inbox. You arrive at the store and open whatever chat app your family members used for their requests and start mentally checking off items until you inevitably hit a roadblock - they are out of stock of a certain item.
 
-### `yarn test`
+You text back, asking if "x" brand is a suitable replacement and get into a discussion. Images are sent, more text messages flood your inbox, and by the end of the ordeal, your chat log is a jumbled mess of images and text. But you're still not done! That was just a single item, time to wade through this jumbled mess to find out the next item to complete.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `yarn build`
+Basket allows you to organize this jumbled mess by **providing structure to how you communicate about your shopping list.**
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<div align="center">
+<img src="docs/assets/overview.gif" width="333" height="666" />
+</div>
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Items are organized as you would expect from a shopping list app but the real power comes from **the ability to communicate in realtime**.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+There's **no app to install** as it **runs on any browser** and **sharing a list is as simple as sharing a uniquely generated link**.
 
-### `yarn eject`
+<div align="center">
+<img src="docs/assets/copyLink.gif" width="333" height="666" autoPlay loop />
+</div>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Features
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Authentication** (managed by Auth0)
+- **Caching** (never fetches redudant data)
+- **Optimistic Responses** (UI updates the moment you perform an action, resulting in a snappy user experience)
+- **Network Retries** (won't crash on unstable connections)
+- **Gestures** (swipe to edit/delete)
+- **Dark Mode** (a VERY important feature 😛)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+You can see how these features evolved and were integrated through the [project's Github commits](https://github.com/engbrianlee/basket/commits/master).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Tech Stack
 
-## Learn More
+After an initial project ideation and planning phase, I was able to develop the entire app in approximately 2 weeks due to these amazing technologies:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Frontend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **React (Create React App)**: Frontend Framework
+- **TailwindCSS**: CSS
+- **Apollo Client**: GraphQL Client
 
-### Code Splitting
+### Backend
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+- **Hasura**: GraphQL Engine, Authorization, Serverless Function Integration
 
-### Analyzing the Bundle Size
+### Authentication
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+- **Auth0**: Authentication
 
-### Making a Progressive Web App
+## Conclusion & Disclaimer
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+> Disclaimer: Do not use this app to store any sensitive information; it is for DEMO purposes only.
 
-### Advanced Configuration
+Check out the [demo](BASKET_LIVE_SITE_LINK).
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+There are still a lot of core features to complete:
 
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- Push Notifications
+- Better UX/UI for realtime capabilities
+- [Many, many more](https://github.com/engbrianlee/basket/issues)
