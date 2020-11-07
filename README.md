@@ -74,7 +74,7 @@ After an initial project ideation and planning phase, I was able to develop the 
 
 > Disclaimer: Do not use this app to store any sensitive information; it is for DEMO purposes only.
 
-Check out the [demo](BASKET_LIVE_SITE_LINK).
+Check out the [demo](https://basket-ebl.vercel.app).
 
 There are still a lot of core features to complete:
 
